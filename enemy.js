@@ -1,5 +1,5 @@
 class Enemy{    
-    constructor(x, y, ghostPath){
+    constructor(x, y, ghostPath, asset){
         this.x = x
         this.y = y
         this.lastPosition = {
@@ -8,6 +8,12 @@ class Enemy{
         }
         this.pathIndex = 1;
         this.ghostPath = ghostPath;
+        this.originalAsset = asset;
+        this.resetSeizureSpawnTime = {
+            x : x,
+            y : y,
+            dir : ''
+        }
     }
 
     setIncrement(x, y){
@@ -20,11 +26,11 @@ class Enemy{
     getY(){ return this.y }
 
     render(){
-        image(enemy['red'], this.x * 40, this.y * 40, 40, 40) 
+        image(!ENEMY_DEAD ? this.originalAsset : enemy.dead, this.x * 40, this.y * 40, 40, 40) 
+        !ENEMY_DEAD ? this.move() : false
     }
 
     move(){
-        let newMove = false;
         const dest = this.ghostPath[this.pathIndex];
         this.lastPosition = 
         {
@@ -54,13 +60,59 @@ class Enemy{
         this.pathIndex = 1;
     }
 
-    proceedToTarget(){
-        resetIndex();
-        const playerPost = player.lastPosition;
-        this.move()
+    proceedToTarget(isTar){
+        const playerPost = !isTar ? player.lastPosition : this.calcRandSafeSpot()
         this.reset();
         if(nodes[playerPost.x+","+playerPost.y]){
             this.ghostPath = PathFinder.BFS(playerPost, this.lastPosition).reverse();
+        }
+    }
+
+    hideFromPlayer(){
+        // if(!this.hideFromPlayerSpawn){
+        // this.hideFromPlayerSpawn = true;
+        // this.reset();
+        // this.ghostPath = PathFinder.BFS(this.calcRandSafeSpot(), this.lastPosition).reverse(); 
+        // }
+        // // if(this.pathIndex == this.ghostPath.length-1){
+        // //     console.log(this)
+        // //     this.hideFromPlayerSpawn = true;
+        // // }
+
+    }
+
+    calcRandSafeSpot(){
+        while(true){
+            let x = Math.floor((Math.random() * (20 - 0) + 0))
+            let y = Math.floor((Math.random() * (20 - 0) + 0))
+            if(nodes[x+","+y]){
+                return { x : x, y : y }
+            }
+        }
+    }
+
+    getRandDirection(cP){
+        const dir = ENEMY_DIR[GET_RAND(4,0)];
+        console.log(dir, cP)
+        switch(dir){
+            case 'right' : {
+                if(nodes[(cP.x+1)+','+(cP.y)]){
+                    return { x : cP.x+1, y : cP.y }
+                }
+            }case 'left' : {
+                if(nodes[(cP.x-1)+','+(cP.y)]){
+                    return { x : cP.x-1, y : cP.y }
+                }
+            }case 'down' : {
+                if(nodes[(cP.x)+','+(cP.y+1)]){
+                    return { x : cP.x, y : cP.y+1 }
+                }
+            }case 'up' : {
+                if(nodes[(cP.x)+','+(cP.y-1)]){
+                    return { x : cP.x, y : cP.y-1 }
+                }
+            }
+            default : this.getRandDirection(cP)
         }
     }
 }

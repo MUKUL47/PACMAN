@@ -2,8 +2,8 @@ var walkablePath
 var playground
 var player
 var ghosts = []
-var walls, food, nodes = {}
-let wallImg, walkable, foodItems = {}; pacman = {};; enemy = {} 
+var walls, food, nodes = {}, energy;
+let wallImg, walkable, foodItems = {}; pacman = {};; enemy = {}; energyBar = {}; 
 let ghostPath, ghost
 
 let ALL_PATH = {}
@@ -13,28 +13,37 @@ const GLOBAL_BOUNDS = 20
 const CANVAS_SIZE = 800
 const STRIPE_SIZE = 40
 const FRAME_RATE = Infinity
+const GET_RAND = (min, max) => Math.floor((Math.random() * (max- min) + min))
+const ENEMY_X = [0, 19]
+const ENEMY_Y = [0, 19]
+const NODES = { x : 20, y : 20 }
 //__________________________________
 
 //_________PLAYER CONST_________________
-let PLAYER_START = {}
-PLAYER_START.x =  10
-PLAYER_START.y =  10
+const PLAYER_START = {x : 10, y : 15}
+const PLAYGROUND_COORD = { x : 20, y : 20 }
 //__________________________________
 
 
 //___________ENEMY CONST_____________
 let ENEMY_SPEED = 0.025
+let ENEMY_DEAD = false;
+let ENEMY_HELL_TIME = 10
+const ENEMY_DIR = ['right', 'left', 'down', 'up']
 //__________________________________
 
 function preload() {
-    walkable = loadImage('assets/walkable.png')
-    wallImg = loadImage('assets/wall1.png')
+    walkable        = loadImage('assets/walkable.png')
+    wallImg         = loadImage('assets/wall1.png')
     pacman['right'] = loadImage('assets/pacman_right.jpg')
-    pacman['left'] = loadImage('assets/pacman_left.jpg')
-    pacman['down'] = loadImage('assets/pacman_down.jpg')
-    pacman['up'] = loadImage('assets/pacman_up.jpg')
-    food = loadImage('assets/food.png')
-    enemy.red = loadImage('assets/enemy_red.jpg')
+    pacman['left']  = loadImage('assets/pacman_left.jpg')
+    pacman['down']  = loadImage('assets/pacman_down.jpg')
+    pacman['up']    = loadImage('assets/pacman_up.jpg')
+    food            = loadImage('assets/pacman_food.png')
+    energy          = loadImage('assets/pacman_energy.webp')
+    enemy.red       = loadImage('assets/enemy_red.jpg')
+    enemy.yellow    = loadImage('assets/enemy_yellow.jpg')
+    enemy.dead      = loadImage('assets/dead_pacman.png')
 }
 
 function setup(){
@@ -50,15 +59,17 @@ function initInstance(){
     walkablePath    = new Array()
     foodItems       = new Array()
     nodes           = new Array()
-    playground      = new Playground(20,20)
-    player          = new Player(10, 15)
+    playground      = new Playground(PLAYGROUND_COORD.x, PLAYGROUND_COORD.y)
+    player          = new Player(PLAYER_START.x, PLAYER_START.y)
 }
 
 function renderer(){
-    playground.render([{nodes : walls, asset : wallImg},{nodes : Object.values(foodItems), asset : food}])
-    
+    playground.render(
+        [{nodes : Object.values(walls), asset : wallImg},
+        {nodes : Object.values(foodItems), asset : food},
+        {nodes : Object.values(energyBar), asset : energy}
+    ])
     player.render()
-    // 
 }
 
 function draw(){
@@ -70,22 +81,34 @@ function draw(){
 
 function ghostsManagement(){
     ghosts.forEach( ghost => {
+        resetIndex();
         ghost.render()
-        ghost.proceedToTarget()
+        !ENEMY_DEAD ? ghost.proceedToTarget() : ghost.hideMovement()
     })
+    if(ENEMY_DEAD && (((new Date() - ENEMY_DEAD)/1000).toFixed() >= ENEMY_HELL_TIME)){
+        ENEMY_DEAD = false;
+    }
 }
 
 function init(){
-    for(let i = 0; i < 20; i++){
-        for(let j = 0; j < 20; j++){
+    for(let i = 0; i < NODES.x; i++){
+        for(let j = 0; j < NODES.y; j++){
                 nodes[j+","+i] = new Node(j, i)
-                if(Math.floor((Math.random() * (3- 0) + 0)) == 2  && j != 0 && i != 0){
-                    delete nodes[j+","+i]
-                    walls.push(new Wall(j, i))
+                if(GET_RAND(3,0) == 2 && 
+                ENEMY_X.indexOf(j) == -1 && 
+                ENEMY_Y.indexOf(i) == -1 &&
+                PLAYER_START.x != j && 
+                PLAYER_START.y != i
+                ){
+                        delete nodes[j+","+i]
+                        walls.push(new Wall(j, i))
                 }
                 else
-                 if(Math.floor(Math.random() * (100 - 0) + 0) == 0){
+                 if(Math.floor(Math.random() * (25 - 0) + 0) == 0){
                     foodItems[j+','+i] = new Food(j, i)
+                }
+                else if(Math.floor(Math.random() * (50 - 0) + 0) == 0){
+                    energyBar[j+','+i] = new Energy(j, i)
                 }
         }   
     }
@@ -98,10 +121,10 @@ function init(){
     // resetIndex();
     // let d = PathFinder.BFS(player.lastPosition, { x : 19, y : 0 }).reverse()
     ghosts = [
-        new Enemy(0, 0, a ),
-        // new Enemy(19, 19,  b),
-        // new Enemy(0, 19, c),
-        // new Enemy(19, 0,  d)
+        new Enemy(0, 0, a, enemy.red ),
+        // new Enemy(19, 19,  b, enemy.yellow ),
+        // new Enemy(0, 19, c, enemy.red ),
+        // new Enemy(19, 0,  d, enemy.red )
     ]
 }
 

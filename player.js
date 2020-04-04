@@ -7,6 +7,7 @@ class Player{
         this.stop = -1;
         this.minToStop = false;
         this.previousMove = ''
+        this.lastDirection = this.direction
         this.lastPosition = {
             x : x,
             y : y
@@ -27,6 +28,7 @@ class Player{
             y : Math.round(this.y)
         };
         this.eatFood();
+        this.getEnergy();
         this.checkBounds();
     }
 
@@ -44,15 +46,18 @@ class Player{
             case 'right' : {
                 this.direction = 'right'
                 this.setIncrement(0.05, 0);
+                this.lastDirection = 'right'
                 if(this.previousMove != 'right'){
                     this.previousMove = 'right'
                     this.minToStop = this.getStopPostion(this.direction)
                 }
+                // console.log('right',)
                 break;
             }
             case 'left' : {
                 this.direction = 'left'
                 this.setIncrement(-0.05, 0);
+                this.lastDirection = 'left'
                 if(this.previousMove != 'left'){
                     this.previousMove = 'left'
                     this.minToStop = this.getStopPostion(this.direction)
@@ -62,6 +67,7 @@ class Player{
             case 'up' : {
                 this.direction = 'up'
                 this.setIncrement(0, -0.05);
+                this.lastDirection = 'up'
                 if(this.previousMove != 'up'){
                     this.previousMove = 'up'
                     this.minToStop = this.getStopPostion(this.direction)
@@ -71,6 +77,7 @@ class Player{
             case 'down' : {
                 this.direction = 'down'
                 this.setIncrement(0, 0.05);
+                this.lastDirection = 'down'
                 if(this.previousMove !='down'){
                     this.previousMove = 'down'
                     this.minToStop = this.getStopPostion(this.direction)
@@ -100,18 +107,43 @@ class Player{
         f ? delete foodItems[f.x+','+f.y] : false;
     }
 
+    getEnergy(){
+        let f = Object.values(energyBar).map( (food, i) => { if(Math.abs(food.y - this.y) <=0.5 && Math.abs(food.x - this.x) <=0.5){ return food; } }).filter(unwanted => unwanted != undefined)[0]
+        if(f){
+            ENEMY_DEAD = new Date();
+            delete energyBar[f.x+','+f.y]
+            ghosts.forEach( ghost => {
+                let rX = Math.floor(ghost.x)
+                let rY = Math.floor(ghost.y)
+                ghost.x = Math.floor(ghost.x)
+                ghost.y = Math.floor(ghost.y)
+                 ghost.resetSeizureSpawnTime = ghost.getRandDirection({ x : rX, y : rY })
+            })
+            
+        }
+    }
+
     checkBounds(){
-        if(Math.round(this.x) >= 20 && this.direction == 'right'){
-            this.x =- 0.5
+
+        if(this.direction == 'right'){
+            if(Math.round(this.x) >= 19.5){
+                this.x = nodes[0+","+Math.round(this.y)] ? -0.5 : GLOBAL_BOUNDS - 0.5
+            }
         }
-        else if(Math.round(this.x) <= -0.5 && this.direction == 'left'){
-            this.x = 19.5
+        else if( this.direction == 'left'){
+            if(Math.round(this.x) <= -0.5){
+                this.x = nodes[19+","+Math.round(this.y)] ? GLOBAL_BOUNDS - 0.5 : -0.5
+            }
         }
-        else if(Math.round(this.y) >= 20 && this.direction == 'down'){
-            this.y =- 0.5
+        else if( this.direction == 'down'){
+            if(Math.round(this.y) >= 19.5){
+                this.y = nodes[Math.round(this.x)+","+0] ? -0.5 : GLOBAL_BOUNDS - 0.5
+            }
         }
-        else if(Math.round(this.y) <= -0.5 && this.direction == 'up'){
-            this.y = 19.5
+        else if( this.direction == 'up'){
+            if(Math.round(this.y) <= -0.5){
+                this.y= nodes[Math.round(this.x)+","+19] ? GLOBAL_BOUNDS - 0.5 : -0.5
+            }
         }
         this.minToStop = this.getStopPostion(this.direction)
     }
@@ -141,8 +173,12 @@ class Player{
         cb(cp);
     }
 
-    invalidDirection(direction){
-        this.minToStop = this.getStopPostion(direction);
-        return this.tellMeWhenToStop(direction)
+    validDirection(direction){
+        switch(direction){
+            case 'right' : return nodes[Math.round(this.x+1)+','+Math.round(this.y)];
+            case 'left' : return nodes[Math.round(this.x-1)+','+Math.round(this.y)];
+            case 'down' : return nodes[Math.round(this.x)+','+Math.round(this.y+1)];
+            case 'up' : return nodes[Math.round(this.x)+','+Math.round(this.y-1)];
+        }
     }
 }
