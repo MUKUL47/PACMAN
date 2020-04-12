@@ -28,7 +28,7 @@ const PLAYGROUND_COORD = { x : 20, y : 20 }
 //___________ENEMY CONST_____________
 let ENEMY_SPEED = 0.025
 let ENEMY_DEAD = false;
-let ENEMY_HELL_TIME = 10
+let ENEMY_HELL_TIME = 1210
 const ENEMY_DIR = ['right', 'left', 'down', 'up']
 //__________________________________
 
@@ -83,7 +83,7 @@ function ghostsManagement(){
     ghosts.forEach( ghost => {
         resetIndex();
         ghost.render()
-        !ENEMY_DEAD ? ghost.proceedToTarget() : ghost.hideMovement()
+        ghost.proceedToTarget()
     })
     if(ENEMY_DEAD && (((new Date() - ENEMY_DEAD)/1000).toFixed() >= ENEMY_HELL_TIME)){
         ENEMY_DEAD = false;

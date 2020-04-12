@@ -9,11 +9,7 @@ class Enemy{
         this.pathIndex = 1;
         this.ghostPath = ghostPath;
         this.originalAsset = asset;
-        this.resetSeizureSpawnTime = {
-            x : x,
-            y : y,
-            dir : ''
-        }
+        this.resetHidePath = false;
     }
 
     setIncrement(x, y){
@@ -27,7 +23,8 @@ class Enemy{
 
     render(){
         image(!ENEMY_DEAD ? this.originalAsset : enemy.dead, this.x * 40, this.y * 40, 40, 40) 
-        !ENEMY_DEAD ? this.move() : false
+        // !ENEMY_DEAD ? this.move() : false
+        this.move()
     }
 
     move(){
@@ -37,6 +34,7 @@ class Enemy{
             x : Math.round(this.x),
             y : Math.round(this.y)
         }
+        this.resetHidePath = ENEMY_DEAD && (!this.ghostPath[this.pathIndex]) ? false : this.resetHidePath;
         if(dest){
             if(dest.y < this.y){
                 this.setIncrement(0, -ENEMY_SPEED)
@@ -51,7 +49,7 @@ class Enemy{
                 this.setIncrement(-ENEMY_SPEED, 0)
             } 
             if(this.x >= dest.x && this.y >= dest.y){
-                this.pathIndex +=1;
+                this.pathIndex +=1;                
             }
         }
     }
@@ -61,7 +59,19 @@ class Enemy{
     }
 
     proceedToTarget(isTar){
-        const playerPost = !isTar ? player.lastPosition : this.calcRandSafeSpot()
+        // console.log(nodes[this.calcRandSafeSpot().x+","+this.calcRandSafeSpot().y])
+        let playerPost;
+        if(!ENEMY_DEAD){
+            playerPost = player.lastPosition;
+        }else{
+            if(!this.resetHidePath){
+                playerPost = this.calcRandSafeSpot();
+                this.resetHidePath = playerPost;
+                console.log(this.resetHidePath)
+            }else{
+                playerPost = this.resetHidePath;
+            }
+        }
         this.reset();
         if(nodes[playerPost.x+","+playerPost.y]){
             this.ghostPath = PathFinder.BFS(playerPost, this.lastPosition).reverse();

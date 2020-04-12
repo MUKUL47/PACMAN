@@ -39,10 +39,11 @@ class Player{
         image(pacman[this.direction], this.x * 40+5, this.y * 40+5, 30, 30)    
     }
 
-    movement(direction){
+    movement(dir){
         // const invalidDirection = this.invalidDirection(direction);
         // console.log('invalidDirection',invalidDirection)
-        switch(direction){
+        // let direction = this.checkValidDirection(dir);
+        switch(dir){
             case 'right' : {
                 this.direction = 'right'
                 this.setIncrement(0.05, 0);
@@ -110,16 +111,16 @@ class Player{
     getEnergy(){
         let f = Object.values(energyBar).map( (food, i) => { if(Math.abs(food.y - this.y) <=0.5 && Math.abs(food.x - this.x) <=0.5){ return food; } }).filter(unwanted => unwanted != undefined)[0]
         if(f){
+            ghosts.forEach( ghost => ghost.resetHidePath = false)
             ENEMY_DEAD = new Date();
             delete energyBar[f.x+','+f.y]
-            ghosts.forEach( ghost => {
-                let rX = Math.floor(ghost.x)
-                let rY = Math.floor(ghost.y)
-                ghost.x = Math.floor(ghost.x)
-                ghost.y = Math.floor(ghost.y)
-                 ghost.resetSeizureSpawnTime = ghost.getRandDirection({ x : rX, y : rY })
-            })
-            
+            // ghosts.forEach( ghost => {
+            //     let rX = Math.floor(ghost.x)
+            //     let rY = Math.floor(ghost.y)
+            //     ghost.x = Math.floor(ghost.x)
+            //     ghost.y = Math.floor(ghost.y)
+            //      ghost.resetSeizureSpawnTime = ghost.getRandDirection({ x : rX, y : rY })
+            // })
         }
     }
 
@@ -180,5 +181,16 @@ class Player{
             case 'down' : return nodes[Math.round(this.x)+','+Math.round(this.y+1)];
             case 'up' : return nodes[Math.round(this.x)+','+Math.round(this.y-1)];
         }
+    }
+
+    checkValidDirection(newDir){
+        let isValid;
+        if(this.direction == 'right' || this.direction == 'left' && newDir == 'up' || newDir == 'down'){
+            isValid = nodes[Math.floor(this.x)+","+Math.floor(this.y+1)] && nodes[Math.floor(this.x)+","+Math.floor(this.y-1)];            
+        }
+        else if(this.direction == 'right' || this.direction == 'left' && newDir == 'up' || newDir == 'down'){
+            isValid = nodes[Math.floor(this.x+1)+","+Math.floor(this.y)] && nodes[Math.floor(this.x-1)+","+Math.floor(this.y)];
+        }
+        return !isValid ? this.direction : newDir
     }
 }
