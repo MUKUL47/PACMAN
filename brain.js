@@ -26,11 +26,15 @@ const PLAYGROUND_COORD = { x : 20, y : 20 }
 
 
 //___________ENEMY CONST_____________
-let ENEMY_SPEED = 0.025
+let ENEMY_SPEED = 0.03
 let ENEMY_DEAD = false;
-let ENEMY_HELL_TIME = 1210
+let ENEMY_HELL_TIME = 15
 const ENEMY_DIR = ['right', 'left', 'down', 'up']
 //__________________________________
+
+//________MISC______________
+let totalFoodItems = 0;
+//
 
 function preload() {
     walkable        = loadImage('assets/walkable.png')
@@ -41,8 +45,10 @@ function preload() {
     pacman['up']    = loadImage('assets/pacman_up.jpg')
     food            = loadImage('assets/pacman_food.png')
     energy          = loadImage('assets/pacman_energy.webp')
-    enemy.red       = loadImage('assets/enemy_red.jpg')
-    enemy.yellow    = loadImage('assets/enemy_yellow.jpg')
+    enemy.red       = loadImage('assets/redEnemyy.jpg')
+    enemy.yellow    = loadImage('assets/yellowEnemy.jpg')
+    enemy.blue    = loadImage('assets/blueEnemy.jpg')
+    enemy.pink    = loadImage('assets/pinkEnemy.jpg')
     enemy.dead      = loadImage('assets/dead_pacman.png')
 }
 
@@ -67,7 +73,8 @@ function renderer(){
     playground.render(
         [{nodes : Object.values(walls), asset : wallImg},
         {nodes : Object.values(foodItems), asset : food},
-        {nodes : Object.values(energyBar), asset : energy}
+        {nodes : Object.values(energyBar), asset : energy},
+        // {nodes : Object.values(ghosts[0].ghostPath), asset : energy}
     ])
     player.render()
 }
@@ -81,7 +88,6 @@ function draw(){
 
 function ghostsManagement(){
     ghosts.forEach( ghost => {
-        resetIndex();
         ghost.render()
         ghost.proceedToTarget()
     })
@@ -112,19 +118,27 @@ function init(){
                 }
         }   
     }
+    const originalNode = [];
+    const originalNode1 = [];
+    const originalNode2 = [];
+    const originalNode3 = [];
+    Object.assign(originalNode, nodes)
+    Object.assign(originalNode1, nodes)
+    Object.assign(originalNode2, nodes)
+    Object.assign(originalNode3, nodes)
     PathFinder.mapToNodes()
-    let a = PathFinder.BFS(player.lastPosition, { x : 0, y : 0 }).reverse();
-    // resetIndex();
-    // let b = PathFinder.BFS(player.lastPosition, { x : 19, y : 19 }).reverse()
-    // resetIndex();
-    // let c = PathFinder.BFS(player.lastPosition, { x : 0, y : 19 }).reverse()
-    // resetIndex();
-    // let d = PathFinder.BFS(player.lastPosition, { x : 19, y : 0 }).reverse()
+    let a = PathFinder.BFS(player.lastPosition, { x : 0, y : 0 }, originalNode).reverse();
+    resetIndex();
+    let b = PathFinder.BFS(player.lastPosition, { x : 19, y : 19 }, originalNode1).reverse()
+    resetIndex();
+    let c = PathFinder.BFS(player.lastPosition, { x : 0, y : 19 }, originalNode2).reverse()
+    resetIndex();
+    let d = PathFinder.BFS(player.lastPosition, { x : 19, y : 0 }, originalNode3).reverse()
     ghosts = [
-        new Enemy(0, 0, a, enemy.red ),
-        // new Enemy(19, 19,  b, enemy.yellow ),
-        // new Enemy(0, 19, c, enemy.red ),
-        // new Enemy(19, 0,  d, enemy.red )
+        new Enemy(0, 0,     a,      enemy.red ,     originalNode,   20),
+        new Enemy(19, 19,   b,      enemy.yellow,   originalNode1,  10 ),
+        new Enemy(0, 19,    c,      enemy.blue,      originalNode2,  5 ),
+        new Enemy(19, 0,    d,      enemy.pink,      originalNode3,   2.5 )
     ]
 }
 

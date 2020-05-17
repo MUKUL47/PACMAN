@@ -1,13 +1,14 @@
 class PathFinder{
-    static BFS(target, source){
+    static BFS(target, source, nodess){
         let verticies = new Array();
         let visitedNodes = new Array();
-        verticies.push(nodes[source.x+','+source.y]);
+        console.log(source.x+','+source.y)
+        verticies.push(nodess[source.x+','+source.y]);
         let c = 0;
-        let current = nodes[target.x+','+target.y];
-        // console.log(nodes[source.x+','+source.y], source)
+        let current = nodess[target.x+','+target.y];
+        // console.log(nodess[source.x+','+source.y], source)
         // console.log('-',target, current)
-        let sourceCurrent = nodes[source.x+','+source.y];
+        let sourceCurrent = nodess[source.x+','+source.y];
         let found = false
         while(!verticies.length == 0){
             const currentNode = verticies.shift();
@@ -18,9 +19,9 @@ class PathFinder{
                 let x = neighbour.x;
                 let y = neighbour.y;
                 if(visitedNodes.indexOf(x+","+y) == -1){
-                    nodes[x+","+y].indexFromSource = c;
+                    nodess[x+","+y].indexFromSource = c;
                     visitedNodes.push(x+","+y)
-                    verticies.push(nodes[x+","+y])
+                    verticies.push(nodess[x+","+y])
                 }
             })
     }

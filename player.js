@@ -104,30 +104,27 @@ class Player{
     }
 
     eatFood(){
-        let f = Object.values(foodItems).map( (food, i) => { if(Math.abs(food.y - this.y) <=0.5 && Math.abs(food.x - this.x) <=0.5){ return food; } }).filter(unwanted => unwanted != undefined)[0]
-        f ? delete foodItems[f.x+','+f.y] : false;
+        let f = Object.values(foodItems).filter( (food, i) => { if(Math.abs(food.y - this.y) <=0.5 && Math.abs(food.x - this.x) <=0.5){ return food; } })[0]
+        if(f){
+            delete foodItems[f.x+','+f.y]
+            totalFoodItems += 1;
+            document.getElementById("score").innerHTML = `Score : ${totalFoodItems}`
+        }
     }
 
     getEnergy(){
-        let f = Object.values(energyBar).map( (food, i) => { if(Math.abs(food.y - this.y) <=0.5 && Math.abs(food.x - this.x) <=0.5){ return food; } }).filter(unwanted => unwanted != undefined)[0]
+        let f = Object.values(energyBar).filter( (food, i) => { if(Math.abs(food.y - this.y) <=0.5 && Math.abs(food.x - this.x) <=0.5){ return food; } })[0]
         if(f){
             ghosts.forEach( ghost => ghost.resetHidePath = false)
             ENEMY_DEAD = new Date();
             delete energyBar[f.x+','+f.y]
-            // ghosts.forEach( ghost => {
-            //     let rX = Math.floor(ghost.x)
-            //     let rY = Math.floor(ghost.y)
-            //     ghost.x = Math.floor(ghost.x)
-            //     ghost.y = Math.floor(ghost.y)
-            //      ghost.resetSeizureSpawnTime = ghost.getRandDirection({ x : rX, y : rY })
-            // })
         }
     }
 
     checkBounds(){
 
         if(this.direction == 'right'){
-            if(Math.round(this.x) >= 19.5){
+            if(Math.round(this.x) >= (GLOBAL_BOUNDS-.5)){
                 this.x = nodes[0+","+Math.round(this.y)] ? -0.5 : GLOBAL_BOUNDS - 0.5
             }
         }
@@ -137,7 +134,7 @@ class Player{
             }
         }
         else if( this.direction == 'down'){
-            if(Math.round(this.y) >= 19.5){
+            if(Math.round(this.y) >= (GLOBAL_BOUNDS-.5)){
                 this.y = nodes[Math.round(this.x)+","+0] ? -0.5 : GLOBAL_BOUNDS - 0.5
             }
         }
@@ -184,12 +181,14 @@ class Player{
     }
 
     checkValidDirection(newDir){
+        if(this.direction == 'up' || this.direction == 'down') return newDir;
         let isValid;
         if(this.direction == 'right' || this.direction == 'left' && newDir == 'up' || newDir == 'down'){
-            isValid = nodes[Math.floor(this.x)+","+Math.floor(this.y+1)] && nodes[Math.floor(this.x)+","+Math.floor(this.y-1)];            
-        }
-        else if(this.direction == 'right' || this.direction == 'left' && newDir == 'up' || newDir == 'down'){
-            isValid = nodes[Math.floor(this.x+1)+","+Math.floor(this.y)] && nodes[Math.floor(this.x-1)+","+Math.floor(this.y)];
+            if(newDir == 'up'){
+                isValid = nodes[Math.floor(this.x)+","+Math.floor(this.y)];            
+            }else{
+                isValid = nodes[Math.floor(this.x)+","+Math.round(this.y)]
+            }
         }
         return !isValid ? this.direction : newDir
     }
