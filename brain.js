@@ -90,11 +90,24 @@ function ghostsManagement(){
     ghosts.forEach( ghost => {
         ghost.render()
         ghost.proceedToTarget()
+        contactWithPlayer(ghost)
     })
     if(ENEMY_DEAD && (((new Date() - ENEMY_DEAD)/1000).toFixed() >= ENEMY_HELL_TIME)){
         ENEMY_DEAD = false;
     }
 }
+
+function contactWithPlayer(ghost){
+        if(Math.abs(ghost.x - player.x) <= 0.4 && Math.abs(ghost.y - player.y) <= 0.4){
+            if(ENEMY_DEAD){
+                alert(`ghost(${ghost.originalTimer}) dead`)
+            }else{
+                alert(`Player died`)
+            }
+            noLoop()
+        }
+    }
+
 
 function init(){
     for(let i = 0; i < NODES.x; i++){
@@ -118,6 +131,7 @@ function init(){
                 }
         }   
     }
+    PathFinder.mapToNodes()
     const originalNode = [];
     const originalNode1 = [];
     const originalNode2 = [];
@@ -126,7 +140,6 @@ function init(){
     Object.assign(originalNode1, nodes)
     Object.assign(originalNode2, nodes)
     Object.assign(originalNode3, nodes)
-    PathFinder.mapToNodes()
     let a = PathFinder.BFS(player.lastPosition, { x : 0, y : 0 }, originalNode).reverse();
     resetIndex();
     let b = PathFinder.BFS(player.lastPosition, { x : 19, y : 19 }, originalNode1).reverse()

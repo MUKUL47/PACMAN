@@ -2,7 +2,6 @@ class PathFinder{
     static BFS(target, source, nodess){
         let verticies = new Array();
         let visitedNodes = new Array();
-        console.log(source.x+','+source.y)
         verticies.push(nodess[source.x+','+source.y]);
         let c = 0;
         let current = nodess[target.x+','+target.y];

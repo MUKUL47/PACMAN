@@ -20,7 +20,6 @@ class Enemy{
         this.y += y;
         this.newMove = true;
     }
-
     getX(){ return this.x }
     getY(){ return this.y }
 
@@ -35,9 +34,6 @@ class Enemy{
     }
 
     move(){
-        if(ENEMY_DEAD){
-            console.log(this.originalTimer+'->> ',this.x+","+this.y)
-        }
         const dest = this.ghostPath[this.pathIndex];
         this.lastPosition = 
         {
@@ -74,7 +70,6 @@ class Enemy{
             if(!this.resetHidePath){
                 playerPost = this.calcRandSafeSpot();
                 this.resetHidePath = playerPost;
-                console.log(this.resetHidePath)
             }else{
                 playerPost = this.resetHidePath;
             }
@@ -86,7 +81,6 @@ class Enemy{
                 this.findTimer = this.originalTimer
                 this.resetMap()
                 this.ghostPath = PathFinder.BFS(playerPost, this.lastPosition, this.myGhostPath).reverse();
-                console.log('ghostpath',this.ghostPath)
             }
         }
     }

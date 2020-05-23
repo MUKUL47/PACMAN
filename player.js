@@ -104,7 +104,7 @@ class Player{
     }
 
     eatFood(){
-        let f = Object.values(foodItems).filter( (food, i) => { if(Math.abs(food.y - this.y) <=0.5 && Math.abs(food.x - this.x) <=0.5){ return food; } })[0]
+        let f = Object.values(foodItems).filter(food => Math.abs(food.y - this.y) <=0.5 && Math.abs(food.x - this.x) <=0.5)[0]
         if(f){
             delete foodItems[f.x+','+f.y]
             totalFoodItems += 1;
@@ -113,7 +113,7 @@ class Player{
     }
 
     getEnergy(){
-        let f = Object.values(energyBar).filter( (food, i) => { if(Math.abs(food.y - this.y) <=0.5 && Math.abs(food.x - this.x) <=0.5){ return food; } })[0]
+        let f = Object.values(energyBar).filter(food => Math.abs(food.y - this.y) <=0.5 && Math.abs(food.x - this.x) <=0.5)[0]
         if(f){
             ghosts.forEach( ghost => ghost.resetHidePath = false)
             ENEMY_DEAD = new Date();
