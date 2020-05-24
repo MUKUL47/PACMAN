@@ -91,10 +91,11 @@ function ghostsManagement(){
         ghost.render()
         ghost.proceedToTarget()
         contactWithPlayer(ghost)
+        if(ghost.isDead && (((new Date() - ghost.isDead)/1000).toFixed() >= ENEMY_HELL_TIME)){
+            ghost.isDead = false
+        }
     })
-    if(ENEMY_DEAD && (((new Date() - ENEMY_DEAD)/1000).toFixed() >= ENEMY_HELL_TIME)){
-        ENEMY_DEAD = false;
-    }
+    
 }
 
 function contactWithPlayer(ghost){
@@ -148,10 +149,10 @@ function init(){
     resetIndex();
     let d = PathFinder.BFS(player.lastPosition, { x : 19, y : 0 }, originalNode3).reverse()
     ghosts = [
-        new Enemy(0, 0,     a,      enemy.red ,     originalNode,   20),
-        new Enemy(19, 19,   b,      enemy.yellow,   originalNode1,  10 ),
-        new Enemy(0, 19,    c,      enemy.blue,      originalNode2,  5 ),
-        new Enemy(19, 0,    d,      enemy.pink,      originalNode3,   2.5 )
+        new Enemy(1, 0, 0,     a,      enemy.red ,     originalNode,   20),
+        new Enemy(2, 19, 19,   b,      enemy.yellow,   originalNode1,  10 ),
+        new Enemy(3, 0, 19,    c,      enemy.blue,      originalNode2,  5 ),
+        new Enemy(4, 19, 0,    d,      enemy.pink,      originalNode3,   2.5 )
     ]
 }
 

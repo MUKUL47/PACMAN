@@ -1,5 +1,6 @@
 class Enemy{    
-    constructor(x, y, ghostPath, asset, myGhostPath, findTimer){
+    constructor(index, x, y, ghostPath, asset, myGhostPath, findTimer){
+        this.index = index
         this.x = x
         this.y = y
         this.lastPosition = {
@@ -13,6 +14,7 @@ class Enemy{
         this.myGhostPath = myGhostPath
         this.findTimer = findTimer;
         this.originalTimer = findTimer;
+        this.isDead = false;
     }
 
     setIncrement(x, y){
@@ -24,8 +26,8 @@ class Enemy{
     getY(){ return this.y }
 
     render(){
-        image(!ENEMY_DEAD ? this.originalAsset : enemy.dead, this.x * 40, this.y * 40, 40, 40) 
-        // !ENEMY_DEAD ? this.move() : false
+        image(!this.isDead ? this.originalAsset : enemy.dead, this.x * 40, this.y * 40, 40, 40) 
+        // !this.isDead ? this.move() : false
         this.move()
     }
 
@@ -42,7 +44,7 @@ class Enemy{
         }
         const X = Number(this.x).toFixed(1)
         const Y = Number(this.y).toFixed(1)
-        this.resetHidePath = ENEMY_DEAD && (!this.ghostPath[this.pathIndex]) ? false : this.resetHidePath;
+        this.resetHidePath = this.isDead && (!this.ghostPath[this.pathIndex]) ? false : this.resetHidePath;
         if(dest){
             if(dest.y < Y){ this.setIncrement(0, -ENEMY_SPEED)  }
             if(dest.y > Y){ this.setIncrement(0, ENEMY_SPEED)   }
@@ -64,7 +66,7 @@ class Enemy{
     proceedToTarget(isTar){
         // console.log(nodes[this.calcRandSafeSpot().x+","+this.calcRandSafeSpot().y])
         let playerPost;
-        if(!ENEMY_DEAD){
+        if(!this.isDead){
             playerPost = player.lastPosition;
         }else{
             if(!this.resetHidePath){
