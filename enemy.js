@@ -1,5 +1,6 @@
 class Enemy{    
-    constructor(x, y, ghostPath, asset, myGhostPath, findTimer){
+    constructor(id, x, y, ghostPath, asset, myGhostPath, findTimer, spawnLocation, hellTime){
+        this.id = id
         this.x = x
         this.y = y
         this.lastPosition = {
@@ -13,19 +14,22 @@ class Enemy{
         this.myGhostPath = myGhostPath
         this.findTimer = findTimer;
         this.originalTimer = findTimer;
+        this.isDead = false;
+        this.spawnAgain = false;
+        this.spawnLocation = spawnLocation;
+        this.hellTime = hellTime
+        this.speed = ENEMY_SPEED
     }
 
     setIncrement(x, y){
-        this.x = this.x + x;
+        this.x += x;
         this.y += y;
-        this.newMove = true;
     }
     getX(){ return this.x }
     getY(){ return this.y }
 
     render(){
-        image(!ENEMY_DEAD ? this.originalAsset : enemy.dead, this.x * 40, this.y * 40, 40, 40) 
-        // !ENEMY_DEAD ? this.move() : false
+        image(!this.isDead ? this.originalAsset : this.spawnAgain ? enemy.deadMode : enemy.dead, this.x * 40, this.y * 40, 40, 40) 
         this.move()
     }
 
@@ -42,17 +46,22 @@ class Enemy{
         }
         const X = Number(this.x).toFixed(1)
         const Y = Number(this.y).toFixed(1)
-        this.resetHidePath = ENEMY_DEAD && (!this.ghostPath[this.pathIndex]) ? false : this.resetHidePath;
+        this.resetHidePath = this.isDead && (!this.ghostPath[this.pathIndex]) ? false : this.resetHidePath;
         if(dest){
-            if(dest.y < Y){ this.setIncrement(0, -ENEMY_SPEED)  }
-            if(dest.y > Y){ this.setIncrement(0, ENEMY_SPEED)   }
-            if(dest.x > X){ this.setIncrement(ENEMY_SPEED, 0)   }
-            if(dest.x < X){ this.setIncrement(-ENEMY_SPEED, 0)  } 
+            if(dest.y < Y){ this.setIncrement(0, -this.speed)  }
+            if(dest.y > Y){ this.setIncrement(0, this.speed)   }
+            if(dest.x > X){ this.setIncrement(this.speed, 0)   }
+            if(dest.x < X){ this.setIncrement(-this.speed, 0)  } 
             if(X == dest.x && Y == dest.y){
                 this.pathIndex +=1;    
                 this.findTimer -=0.8;  
             }
         }else{
+            if(this.spawnAgain){ 
+                this.spawnAgain = false;
+                this.isDead = false;
+                this.speed = ENEMY_SPEED    
+             }
             this.findTimer = -1
         }
     }
@@ -61,10 +70,9 @@ class Enemy{
         this.pathIndex = 1;
     }
 
-    proceedToTarget(isTar){
-        // console.log(nodes[this.calcRandSafeSpot().x+","+this.calcRandSafeSpot().y])
+    proceedToTarget(){
         let playerPost;
-        if(!ENEMY_DEAD){
+        if(!this.isDead){
             playerPost = player.lastPosition;
         }else{
             if(!this.resetHidePath){
@@ -74,7 +82,6 @@ class Enemy{
                 playerPost = this.resetHidePath;
             }
         }
-        // console.log(this.findTimer)
         if(nodes[playerPost.x+","+playerPost.y]){
             if(this.findTimer <= 0){
                 this.pathIndex = 1
@@ -85,20 +92,8 @@ class Enemy{
         }
     }
 
-    hideFromPlayer(){
-        // if(!this.hideFromPlayerSpawn){
-        // this.hideFromPlayerSpawn = true;
-        // this.reset();
-        // this.ghostPath = PathFinder.BFS(this.calcRandSafeSpot(), this.lastPosition).reverse(); 
-        // }
-        // // if(this.pathIndex == this.ghostPath.length-1){
-        // //     console.log(this)
-        // //     this.hideFromPlayerSpawn = true;
-        // // }
-
-    }
-
     calcRandSafeSpot(){
+        if(this.spawnAgain) return this.spawnLocation
         while(true){
             let x = GET_RAND(0, GLOBAL_BOUNDS)
             let y = GET_RAND(0, GLOBAL_BOUNDS)
@@ -106,28 +101,26 @@ class Enemy{
         }
     }
 
-    // getRandDirection(cP){
-    //     const dir = ENEMY_DIR[GET_RAND(4,0)];
-    //     console.log(dir, cP)
-    //     switch(dir){
-    //         case 'right' : {
-    //             if(nodes[(cP.x+1)+','+(cP.y)]){
-    //                 return { x : cP.x+1, y : cP.y }
-    //             }
-    //         }case 'left' : {
-    //             if(nodes[(cP.x-1)+','+(cP.y)]){
-    //                 return { x : cP.x-1, y : cP.y }
-    //             }
-    //         }case 'down' : {
-    //             if(nodes[(cP.x)+','+(cP.y+1)]){
-    //                 return { x : cP.x, y : cP.y+1 }
-    //             }
-    //         }case 'up' : {
-    //             if(nodes[(cP.x)+','+(cP.y-1)]){
-    //                 return { x : cP.x, y : cP.y-1 }
-    //             }
-    //         }
-    //         default : this.getRandDirection(cP)
-    //     }
-    // }
+    resetSpawn(){
+        /**
+        * 1)if comes in contact with player during deadMode
+        * 1.1)set ENEMY_HELL_TIME -infinity
+        * 1.2)Assign specific spawn location for that ghost & set spawnAgain true
+        * 1.3)check if spawnAgain is true & ghost is on that specific spawnLocation
+        * 1.4)set spawnAgain, isDead = false
+        */
+        if(this.spawnAgain) return
+        this.spawnAgain = true;
+        this.hellTime = Infinity
+        this.resetHidePath = false; 
+        this.findTimer = 0      
+        this.speed = 0.06 
+    }
+
+    removeSpawn(){
+        this.spawnAgain = false;
+        this.hellTime = this.spawnAgain
+    }
+
+
 }

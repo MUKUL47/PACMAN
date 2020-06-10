@@ -47,9 +47,10 @@ function preload() {
     energy          = loadImage('assets/pacman_energy.webp')
     enemy.red       = loadImage('assets/redEnemyy.jpg')
     enemy.yellow    = loadImage('assets/yellowEnemy.jpg')
-    enemy.blue    = loadImage('assets/blueEnemy.jpg')
-    enemy.pink    = loadImage('assets/pinkEnemy.jpg')
+    enemy.blue      = loadImage('assets/blueEnemy.jpg')
+    enemy.pink      = loadImage('assets/pinkEnemy.jpg')
     enemy.dead      = loadImage('assets/dead_pacman.png')
+    enemy.deadMode  = loadImage('assets/ghostDead.jpg')
 }
 
 function setup(){
@@ -91,20 +92,21 @@ function ghostsManagement(){
         ghost.render()
         ghost.proceedToTarget()
         contactWithPlayer(ghost)
+        if(ghost.isDead && (((new Date() - ghost.isDead)/1000).toFixed() >= ghost.hellTime)){
+            ghost.isDead = false
+        }
     })
-    if(ENEMY_DEAD && (((new Date() - ENEMY_DEAD)/1000).toFixed() >= ENEMY_HELL_TIME)){
-        ENEMY_DEAD = false;
-    }
+    
 }
 
 function contactWithPlayer(ghost){
         if(Math.abs(ghost.x - player.x) <= 0.4 && Math.abs(ghost.y - player.y) <= 0.4){
-            if(ENEMY_DEAD){
-                alert(`ghost(${ghost.originalTimer}) dead`)
-            }else{
-                alert(`Player died`)
+            if(ghost.isDead){
+                // alert(`ghost(${ghost.id}) dead`)
+                ghost.resetSpawn()
+            // }else{
+            //     alert(`Player died`)
             }
-            noLoop()
         }
     }
 
@@ -148,10 +150,10 @@ function init(){
     resetIndex();
     let d = PathFinder.BFS(player.lastPosition, { x : 19, y : 0 }, originalNode3).reverse()
     ghosts = [
-        new Enemy(0, 0,     a,      enemy.red ,     originalNode,   20),
-        new Enemy(19, 19,   b,      enemy.yellow,   originalNode1,  10 ),
-        new Enemy(0, 19,    c,      enemy.blue,      originalNode2,  5 ),
-        new Enemy(19, 0,    d,      enemy.pink,      originalNode3,   2.5 )
+        new Enemy(1, 0, 0,     a,      enemy.red ,     originalNode,   20, {x : 0, y : 0}, ENEMY_HELL_TIME),
+        new Enemy(2, 19, 19,   b,      enemy.yellow,   originalNode1,  10, {x : 19, y : 19}, ENEMY_HELL_TIME),
+        new Enemy(3, 0, 19,    c,      enemy.blue,      originalNode2,  5, {x : 0, y : 19}, ENEMY_HELL_TIME ),
+        new Enemy(4, 19, 0,    d,      enemy.pink,      originalNode3,   2.5, {x : 19, y : 0}, ENEMY_HELL_TIME )
     ]
 }
 

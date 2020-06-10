@@ -115,8 +115,10 @@ class Player{
     getEnergy(){
         let f = Object.values(energyBar).filter(food => Math.abs(food.y - this.y) <=0.5 && Math.abs(food.x - this.x) <=0.5)[0]
         if(f){
-            ghosts.forEach( ghost => ghost.resetHidePath = false)
-            ENEMY_DEAD = new Date();
+            ghosts.forEach( ghost => {
+                ghost.resetHidePath = false
+                ghost.isDead = new Date()
+            })
             delete energyBar[f.x+','+f.y]
         }
     }
