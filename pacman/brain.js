@@ -34,9 +34,19 @@ const ENEMY_DIR = ['right', 'left', 'down', 'up']
 
 //________MISC______________
 let totalFoodItems = 0;
-//
+//__________________________
 
+//_______SPAWN_LOCATION_______
+const DEFAULT_LOCATIONS = 
+    [{ x : 0,   y : 0   }, 
+     { x : 0,   y : 19  }, 
+     { x : 19,  y : 0   }, 
+     { x : 19,  y : 19  }]
+const ghostDifficulty = [20, 10, 5, 2.5]
+let enemyStripes = []
+//____________________________
 function preload() {
+    //load all required assets
     walkable        = loadImage('assets/walkable.png')
     wallImg         = loadImage('assets/wall1.png')
     pacman['right'] = loadImage('assets/pacman_right.jpg')
@@ -45,14 +55,15 @@ function preload() {
     pacman['up']    = loadImage('assets/pacman_up.jpg')
     food            = loadImage('assets/pacman_food.png')
     energy          = loadImage('assets/pacman_energy.webp')
+
     enemy.red       = loadImage('assets/redEnemyy.jpg')
     enemy.yellow    = loadImage('assets/yellowEnemy.jpg')
     enemy.blue      = loadImage('assets/blueEnemy.jpg')
     enemy.pink      = loadImage('assets/pinkEnemy.jpg')
+    enemyStripes    = [enemy.red, enemy.yellow, enemy.blue, enemy.pink]
     enemy.dead      = loadImage('assets/dead_pacman.png')
     enemy.deadMode  = loadImage('assets/ghostDead.jpg')
 }
-
 function setup(){
     frameRate(FRAME_RATE)
     createCanvas(CANVAS_SIZE, CANVAS_SIZE)
@@ -101,12 +112,12 @@ function ghostsManagement(){
 
 function contactWithPlayer(ghost){
         if(Math.abs(ghost.x - player.x) <= 0.4 && Math.abs(ghost.y - player.y) <= 0.4){
-            if(ghost.isDead){
-                // alert(`ghost(${ghost.id}) dead`)
+            if(ghost.isDead){ 
                 ghost.resetSpawn()
-            // }else{
-            //     alert(`Player died`)
-            }
+                return;
+             }
+             noLoop()
+             $('.gameover-screen').show()
         }
     }
 
@@ -120,41 +131,34 @@ function init(){
                 ENEMY_Y.indexOf(i) == -1 &&
                 PLAYER_START.x != j && 
                 PLAYER_START.y != i
-                ){
-                        delete nodes[j+","+i]
-                        walls.push(new Wall(j, i))
-                }
-                else
-                 if(Math.floor(Math.random() * (25 - 0) + 0) == 0){
-                    foodItems[j+','+i] = new Food(j, i)
-                }
-                else if(Math.floor(Math.random() * (50 - 0) + 0) == 0){
-                    energyBar[j+','+i] = new Energy(j, i)
-                }
+                )
+                { delete nodes[j+","+i]; walls.push(new Wall(j, i)) }
+
+                else if(GET_RAND(25, 0) == 0){ foodItems[j+','+i] = new Food(j, i) }
+
+                else if(GET_RAND(50, 0) == 0){ energyBar[j+','+i] = new Energy(j, i) }
         }   
     }
     PathFinder.mapToNodes()
-    const originalNode = [];
-    const originalNode1 = [];
-    const originalNode2 = [];
-    const originalNode3 = [];
-    Object.assign(originalNode, nodes)
-    Object.assign(originalNode1, nodes)
-    Object.assign(originalNode2, nodes)
-    Object.assign(originalNode3, nodes)
-    let a = PathFinder.BFS(player.lastPosition, { x : 0, y : 0 }, originalNode).reverse();
-    resetIndex();
-    let b = PathFinder.BFS(player.lastPosition, { x : 19, y : 19 }, originalNode1).reverse()
-    resetIndex();
-    let c = PathFinder.BFS(player.lastPosition, { x : 0, y : 19 }, originalNode2).reverse()
-    resetIndex();
-    let d = PathFinder.BFS(player.lastPosition, { x : 19, y : 0 }, originalNode3).reverse()
-    ghosts = [
-        new Enemy(1, 0, 0,     a,      enemy.red ,     originalNode,   20, {x : 0, y : 0}, ENEMY_HELL_TIME),
-        new Enemy(2, 19, 19,   b,      enemy.yellow,   originalNode1,  10, {x : 19, y : 19}, ENEMY_HELL_TIME),
-        new Enemy(3, 0, 19,    c,      enemy.blue,      originalNode2,  5, {x : 0, y : 19}, ENEMY_HELL_TIME ),
-        new Enemy(4, 19, 0,    d,      enemy.pink,      originalNode3,   2.5, {x : 19, y : 0}, ENEMY_HELL_TIME )
-    ]
+    let ghostRoute = [];
+    DEFAULT_LOCATIONS.forEach(location => {
+        const clonedNode = {}
+        Object.assign(clonedNode, nodes)
+        ghostRoute.push({ clonedNode : clonedNode, path :PathFinder.BFS(player.lastPosition, location, clonedNode).reverse() })
+        resetIndex()
+    })
+    ghosts = DEFAULT_LOCATIONS.map((location, i) =>
+       new Enemy
+       (i, 
+        location.x, 
+        location.y, 
+        ghostRoute[i]['path'], 
+        enemyStripes[i], 
+        ghostRoute[i]['clonedNode'], 
+        ghostDifficulty[i], 
+        location, 
+        ENEMY_HELL_TIME)
+    )
 }
 
 function resetIndex(){
@@ -163,10 +167,10 @@ function resetIndex(){
 
 function keyPressed(){
     switch(keyCode){
-        case RIGHT_ARROW: return 'right'        
+        case RIGHT_ARROW:return 'right'        
         case LEFT_ARROW: return 'left'
-        case UP_ARROW: return 'up'
+        case UP_ARROW:   return 'up'
         case DOWN_ARROW: return 'down'
-        default : return 'right'
+        default :        return 'right'
     }
 }

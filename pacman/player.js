@@ -40,9 +40,6 @@ class Player{
     }
 
     movement(dir){
-        // const invalidDirection = this.invalidDirection(direction);
-        // console.log('invalidDirection',invalidDirection)
-        // let direction = this.checkValidDirection(dir);
         switch(dir){
             case 'right' : {
                 this.direction = 'right'
@@ -162,14 +159,10 @@ class Player{
         let cp = Math.round(this.x)+","+Math.round(this.y);
         let lX = this.lastPosition.split(',')[0];
         let lY = this.lastPosition.split(',')[1];
-        // if(Math.abs(lX - Math.round(this.x)) >= 3 || Math.abs(lY - Math.round(this.y)) >= 3 ){
-        // if(cp != this.lastPosition){
         this.lastPosition = {
             x : Math.round(this.x),
             y : Math.round(this.y)
         };
-            // cb(cp);
-        // }
         cb(cp);
     }
 
