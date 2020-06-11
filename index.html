@@ -1,10 +1,11 @@
 <html>
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-  
-    <link rel="stylesheet" type="text/css" href="SEESS.css">
+    <link rel="stylesheet" type="text/css" href="global.css">
     <body>
         <div class="game-mode">
+
             <div>
                 <button class="restart-btn">Restart</button>
                 <span>
@@ -13,15 +14,26 @@
             </div>
             <div id="score">&nbsp;</div>
         </div>
+
         <div class="gameover-screen" hidden>
-            <div class="gameover-bg"></div>
+            <div class="overlap-bg"></div>
             <div class="gameover-message">
                 <p id='gameover-msg'>Game Over</p>
                 <button class="restart-btn"> Restart </button>
             </div>
         </div>
+
+        <div class="load-screen" hidden>
+            <div class="overlap-bg"></div>
+            <div class="load-message">
+                <p id='load-msg'></p>
+            </div>
+        </div>
+
     </body>
     <script src="pacman/brain.js"></script>
+    <script src="GUI/renderListener.js"></script>
+    <script src="uiListeners.js"></script>
     <script src="pacman/player.js"></script>
     <!-- <script src="config.js"></script> -->
     <script src="pacman/playground.js"></script>
@@ -29,5 +41,4 @@
     <script src="pacman/enemy.js"></script>
     <script src="pacman/node.js"></script>
     <script src="pacman/pathfinder.js"></script>
-    <script src="uiListeners.js"></script>
 </html>

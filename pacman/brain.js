@@ -65,13 +65,13 @@ function preload() {
     enemy.deadMode  = loadImage('assets/ghostDead.jpg')
 }
 function setup(){
+    noLoop()
     frameRate(FRAME_RATE)
     createCanvas(CANVAS_SIZE, CANVAS_SIZE)
     initInstance()
     init()
     renderer()
 }
-
 function initInstance(){
     walls           = new Array()
     walkablePath    = new Array()
