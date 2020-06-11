@@ -1,0 +1,19 @@
+{
+  "name": "PACMAN",
+  "version": "1.0.0",
+  "description": "PACMAN GAME",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "electron": "^9.0.3"
+  },
+  "dependencies": {
+    "url": "^0.11.0"
+  }
+}
