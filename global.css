@@ -23,7 +23,7 @@ html{
 .gameover-message{
     text-align: center;
     padding: 20px;
-    width: 146px;
+    width: 200px;
     margin: 0 auto;
     /* margin-left: 50%; */
     z-index: 1002;
@@ -40,10 +40,9 @@ html{
     font-weight: bold;
 }
 
-.restart-btn, .pause-btn{
+.restart-btn, .pause-btn, .main-menu-navi-btn{
     background: #000;
     border: none;
-    width: 90px;
     font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
@@ -63,4 +62,24 @@ html{
     opacity: 0.8;
     font-size: 36px;
     border-radius: 9px;
+}
+
+.start-bg{
+    position: absolute;
+    color: #fff;
+    font-size: 35px;
+    padding: 55px;
+    margin-left: 35%;
+    z-index: 999999999999999;
+    background-color: gray;
+    border-radius: 9px;
+}
+
+.screen-message{
+    padding: 14px;
+    border: 2px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 10px;
+    background-color: #000;
 }

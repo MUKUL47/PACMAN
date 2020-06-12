@@ -1,3 +1,8 @@
+const onStart = () => { 
+    localStorage.setItem('startGame',true)
+    location.reload()    
+}
+
 loadGame = () => {
     let start = 3;
     $('.load-screen').show();
@@ -14,9 +19,22 @@ loadGame = () => {
         }, 1000)
     }())
 }
-loadGame()
 
-$('.restart-btn').click(_ => location.reload())
+(function(){
+    if(!localStorage.getItem('startGame')) return
+    localStorage.removeItem('startGame')
+    $('.start-screen').hide(); 
+    loadGame() 
+}())
+
+$('.start-game').click(onStart)
+$('.main-menu-navi-btn').click(() => {
+    noLoop()
+    $('.start-screen').show()
+})
+// loadGame()
+
+$('.restart-btn').click(onStart)
 $('.pause-btn').click(_ => {
     if( $('.pause-btn').text().trim().toLowerCase() == 'pause'){
         noLoop()

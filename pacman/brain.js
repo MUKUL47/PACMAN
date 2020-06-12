@@ -64,6 +64,10 @@ function preload() {
     enemy.dead      = loadImage('assets/dead_pacman.png')
     enemy.deadMode  = loadImage('assets/ghostDead.jpg')
 }
+
+function resetGame(){
+}
+
 function setup(){
     noLoop()
     frameRate(FRAME_RATE)
@@ -136,9 +140,12 @@ function init(){
 
                 else if(GET_RAND(25, 0) == 0){ foodItems[j+','+i] = new Food(j, i) }
 
-                else if(GET_RAND(50, 0) == 0){ energyBar[j+','+i] = new Energy(j, i) }
+                else if(GET_RAND(75, 0) == 0){ energyBar[j+','+i] = new Energy(j, i) }
         }   
     }
+    console.log(walls.length)
+    console.log(Object.values(foodItems).length)
+    console.log(Object.values(energyBar).length)
     PathFinder.mapToNodes()
     let ghostRoute = [];
     DEFAULT_LOCATIONS.forEach(location => {

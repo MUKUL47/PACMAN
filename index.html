@@ -8,9 +8,8 @@
 
             <div>
                 <button class="restart-btn">Restart</button>
-                <span>
-                    <button class="pause-btn">Pause</button>
-                </span>
+                <button class="pause-btn">Pause</button>
+                <button class="main-menu-navi-btn">Main Menu</button>
             </div>
             <div id="score">&nbsp;</div>
         </div>
@@ -20,6 +19,7 @@
             <div class="gameover-message">
                 <p id='gameover-msg'>Game Over</p>
                 <button class="restart-btn"> Restart </button>
+                <button class="main-menu-navi-btn">Main Menu</button>
             </div>
         </div>
 
@@ -30,8 +30,17 @@
             </div>
         </div>
 
+        <div class="start-screen">
+            <div class="overlap-bg"></div>
+            <div class="start-bg">
+                <div class="screen-message start-game">Start</div>
+                <div class="screen-message create-map">Create Map</div>
+                <div class="screen-message load-map">Load Map</div>
+            </div>
+        </div>
+
     </body>
-    <script src="pacman/brain.js"></script>
+    <script id='brainScript' src="pacman/brain.js"></script>
     <script src="GUI/renderListener.js"></script>
     <script src="uiListeners.js"></script>
     <script src="pacman/player.js"></script>
