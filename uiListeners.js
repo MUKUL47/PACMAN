@@ -1,6 +1,7 @@
 const onStart = () => { 
-    localStorage.setItem('startGame',true)
-    location.reload()    
+    $('.start-screen').hide(); 
+    $('.gameover-screen').hide()
+    resetGame()
 }
 
 loadGame = () => {
@@ -19,13 +20,6 @@ loadGame = () => {
         }, 1000)
     }())
 }
-
-(function(){
-    if(!localStorage.getItem('startGame')) return
-    localStorage.removeItem('startGame')
-    $('.start-screen').hide(); 
-    loadGame() 
-}())
 
 $('.start-game').click(onStart)
 $('.main-menu-navi-btn').click(() => {

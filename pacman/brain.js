@@ -12,7 +12,7 @@ let ALL_PATH = {}
 const GLOBAL_BOUNDS = 20
 const CANVAS_SIZE = 800
 const STRIPE_SIZE = 40
-const FRAME_RATE = Infinity
+let FRAME_RATE = Infinity
 const GET_RAND = (min, max) => Math.floor((Math.random() * (max- min) + min))
 const ENEMY_X = [0, 19]
 const ENEMY_Y = [0, 19]
@@ -66,6 +66,12 @@ function preload() {
 }
 
 function resetGame(){
+    noLoop()
+    wallImg, walkable, foodItems = {}; pacman = {}; enemy = {}; energyBar = {}; 
+    FRAME_RATE = 60
+    preload()
+    setup()
+    loop()
 }
 
 function setup(){
@@ -83,6 +89,7 @@ function initInstance(){
     nodes           = new Array()
     playground      = new Playground(PLAYGROUND_COORD.x, PLAYGROUND_COORD.y)
     player          = new Player(PLAYER_START.x, PLAYER_START.y)
+    console.log(walls, walkable, foodItems, nodes, playground, player)
 }
 
 function renderer(){
