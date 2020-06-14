@@ -9,6 +9,7 @@ let assetLimit = {
     enemy : 4
 }
 let tileInHand = 'wall'
+let dragMode = false;
 
 function mouseClicked(){  
     if(!CREATION_ENABLED) return
@@ -21,11 +22,15 @@ function mouseClicked(){
             return
         }
         assetLimit[tileInHand] += 1
+        updateAssetLimit(assetLimit[tileInHand])
+        startLoadingIntoArray(tileInHand, false, x, y)
         delete selectedTile[x+","+y]
         return
     }
     if(assetLimit[tileInHand] == 0) return 
     assetLimit[tileInHand] -= 1
+    updateAssetLimit(assetLimit[tileInHand])
+    startLoadingIntoArray(tileInHand, true, x, y)
     if(tileInHand == 'enemy'){
         selectedTile[x+","+y] = { tile : tileInHand, id : assetLimit[tileInHand] }
     }else{
@@ -35,7 +40,7 @@ function mouseClicked(){
 }   
 
 function mouseDragged(){ 
-    if(lastDraggedPos.x == mouseX && lastDraggedPos.y == mouseY) return
+    if(lastDraggedPos.x == mouseX && lastDraggedPos.y == mouseY || !dragMode) return
     lastDraggedPos = { x : mouseX, y : mouseY }
     isDrag = true
     mouseClicked() 
@@ -49,13 +54,33 @@ function initFloorTiling(){
             if(isTile){
                 image(getTile(isTile.tile ? isTile.tile : isTile, enemyTileId), j * 40, i * 40, 40, 40)
             }else{
+                fill(color(0, 0, 255));
                 rect(j*40,i*40,40,40);
             }
         }
     }
 }
 
+function startLoadingIntoArray(asset, isPush, x, y){
+    console.log(asset, isPush, x, y)
+    if(asset == 'wall'){
+        manualWalls.push(new Wall(x, y))
+    }
+    else if(asset == 'food'){
+        manualFood.push(new Food(x, y))
+    }
+    else if(asset == 'energy'){
+        manualFood.push(new Energy(x, y))
+    }
+    else if(asser == 'enemy'){
+        manualEnemyDefaultLocations.push({ x : x, y : y })
+    }else{
+        manualPlayerStart = { x : x, y : y }
+    }
+}
+
 function resetAssetUsage(){
+    dragMode = false;
     tileInHand = 'wall'
     selectedTile = {}
     assetLimit = {

@@ -47,9 +47,12 @@ const ghostDifficulty = [20, 10, 5, 2.5]
 let enemyStripes = []
 //_____________________________________________________________________________________________________________________________________________________________
 //creation
-C_WALLS = 110
-C_FOOD = 15
-C_ENERGY = 5
-C_ENEMY = 4
-CREATION_ENABLED = false
+let CREATION_ENABLED = false
+let manualWalls = new Array() 
+let manualFood = new Array() 
+let manualEnergy = new Array() 
+let manualEnemyDefaultLocations = []
+let manualPlayerStart = {}
+
+///////////////
 

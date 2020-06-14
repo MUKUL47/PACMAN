@@ -1,3 +1,4 @@
+const creationBtns = ['food', 'energy', 'enemy', 'wall', 'pacman']
 const onStart = () => { 
     CREATION_ENABLED = false
     $('#paused-msg').hide()
@@ -53,14 +54,59 @@ function updateFinalScore(score, lastedFor){
 
 
 function loadCreationCenter(){
+    $('.pause-btn').hide()
+    $('.restart-btn').hide()
+    removeAndAddAssetClass('wall')
     resetAssetUsage()
     $('.assets-btns').show()
     $('.start-screen').hide(); 
     setup()
-    loop(0) 
-    setTimeout(_ => CREATION_ENABLED = true, 50)
+    loop() 
+    setTimeout(_ => {
+        CREATION_ENABLED = true
+        disableDragMode()
+        creationBtns.forEach(b => $(`.${b}`).text($(`.${b}`).text().split(' ')[0].trim()+ " ("+assetLimit[b]+")"));
+    }, 50)
 }
 
 function selectMapAsset(asset){
+    if(asset == 'reset') {
+        if(confirm('Are you sure ?')){
+            disableDragMode()
+            resetAssetUsage()
+            removeAndAddAssetClass('wall')
+            creationBtns.forEach(b => $(`.${b}`).text($(`.${b}`).text().split(' ')[0].trim()+ " ("+assetLimit[b]+")"));
+            return
+        }
+        return
+    }
+    removeAndAddAssetClass(asset)
     tileInHand = asset
+}
+
+function removeAndAddAssetClass(currentAsset){
+    creationBtns.forEach(b => $("."+b).removeClass('asset-selected'));
+    $('.'+currentAsset).addClass('asset-selected')
+}
+
+function updateAssetLimit(){
+    $(`.${tileInHand}`).text($(`.${tileInHand}`).text().split(' ')[0].trim()+ " ("+assetLimit[tileInHand]+")")
+}
+
+function disableDragMode(){
+    dragMode = false;
+    const val = $('.dragMode')
+    val.text('Enable Drag Mode')
+    val.removeClass('brown-bg')
+}
+
+function toggleDragMode(){
+    const val = $('.dragMode')
+    if( val.text().split(' ')[0].trim().toLowerCase() == 'enable'){
+        dragMode = true;
+        val.text('Disable Drag Mode')
+        $('.dragMode').addClass('brown-bg')
+        return
+    }
+    disableDragMode()
 }

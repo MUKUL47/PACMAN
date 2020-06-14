@@ -93,7 +93,15 @@ html{
     padding: 10px 0px 10px 10px;
 }
 
+.asset-selected{
+    border: blue !important;
+    background: blueviolet !important;
+    color: black !important;
+    font-weight: bolder !important;
+}
+
 .asset-btn{
+    width: 200px;
     cursor: pointer;
     color: #fff;
     font-size: 23px !important;
@@ -103,3 +111,7 @@ html{
     background-color: black;
     border-radius: 22px 0px 0px 22px;
 }
+
+.red-bg{ background-color: red; }
+
+.brown-bg{ background-color: brown; }
