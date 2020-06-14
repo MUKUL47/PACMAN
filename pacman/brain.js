@@ -110,6 +110,10 @@ function init(){
                 else if(GET_RAND(75, 0) == 0){ energyBar[j+','+i] = new Energy(j, i) }
         }   
     }
+    if(IS_CREATION_DATA){
+        overwriteDefaultConfig()
+        player = new Player(PLAYER_START.x, PLAYER_START.y)
+    }
     PathFinder.mapToNodes()
     let ghostRoute = [];
     DEFAULT_LOCATIONS.forEach(location => {

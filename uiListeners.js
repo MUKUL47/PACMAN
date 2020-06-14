@@ -110,3 +110,21 @@ function toggleDragMode(){
     }
     disableDragMode()
 }
+
+function test(){
+    // CREATION_ENABLED = false;
+    // IS_CREATION_DATA = true;
+    // setup()
+    // loop()
+    // frameRate(60)
+}
+
+function downloadConfig(){
+    overwriteDefaultConfig()
+    console.log(pacmanData)
+    var dataStr = "data:text;charset=utf-8," + encodeURIComponent(JSON.stringify(pacmanData));
+    var dlAnchorElem = $('#downloadLink');
+    dlAnchorElem.attr("href", dataStr);
+    dlAnchorElem.attr("download", "pacmanconfig");
+    dlAnchorElem.click();
+}

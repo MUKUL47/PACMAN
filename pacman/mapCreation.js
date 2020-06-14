@@ -10,7 +10,7 @@ let assetLimit = {
 }
 let tileInHand = 'wall'
 let dragMode = false;
-
+let pacmanData;
 function mouseClicked(){  
     if(!CREATION_ENABLED) return
     const x = Math.floor(mouseX/40)
@@ -62,19 +62,33 @@ function initFloorTiling(){
 }
 
 function startLoadingIntoArray(asset, isPush, x, y){
-    console.log(asset, isPush, x, y)
     if(asset == 'wall'){
+        if(!isPush){ 
+            const index = getObjectIndex(manualWalls, x, y)
+            if(index < 0) return
+            manualWalls.splice(index, 1)
+            return
+        }
         manualWalls.push(new Wall(x, y))
     }
     else if(asset == 'food'){
-        manualFood.push(new Food(x, y))
+        if(!isPush){ delete manualFood[x+','+y]; return }
+        manualFood[x+','+y] = new Food(x, y)
     }
     else if(asset == 'energy'){
-        manualFood.push(new Energy(x, y))
+        if(!isPush){ delete manualEnergy[x+','+y]; return }
+        manualEnergy[x+','+y] = new Energy(x, y)
     }
-    else if(asser == 'enemy'){
+    else if(asset == 'enemy'){
+        if(!isPush){ 
+            const index = getObjectIndex(manualEnemyDefaultLocations, x, y)
+            if(index < 0) return
+            manualEnemyDefaultLocations.splice(index, 1)
+            return
+        }
         manualEnemyDefaultLocations.push({ x : x, y : y })
     }else{
+        if(!isPush) { manualPlayerStart = {}; return }
         manualPlayerStart = { x : x, y : y }
     }
 }
@@ -90,6 +104,11 @@ function resetAssetUsage(){
         pacman : 1,
         enemy : 4
     }
+    manualWalls = new Array() 
+    manualFood = {}
+    manualEnergy = {}
+    manualEnemyDefaultLocations = new Array() 
+    manualPlayerStart = {}
 }
 
 function getEnemyById(id){
@@ -109,4 +128,28 @@ function getTile(tile, enemyId){
         case 'pacman' : return pacman['right']
         case 'enemy' : return getEnemyById(`${enemyId}`)
     }
+}
+
+function overwriteDefaultConfig(){
+    // nodes = {};
+    // for(let i = 0; i < NODES.x; i++){
+    //     for(let j = 0; j < NODES.y; j++){
+    //             if(getObjectIndex(manualWalls, i, j) < 0){
+    //                 nodes[i+","+j] = new Node(i, j)
+    //             }
+    //     }   
+    // }
+    // walls = manualWalls
+    // energyBar = manualEnergy
+    // foodItems = manualFood
+    // DEFAULT_LOCATIONS = manualEnemyDefaultLocations
+    pacmanData = {
+        walls : manualWalls,
+        energyBar : manualEnergy,
+        foodItems : manualFood,
+        DEFAULT_LOCATIONS : manualEnemyDefaultLocations,
+        // nodes : nodes,
+        PLAYER_START : manualPlayerStart
+    }
+    // PLAYER_START = manualPlayerStart
 }
