@@ -53,11 +53,12 @@ function updateFinalScore(score, lastedFor){
 
 
 function loadCreationCenter(){
-    CREATION_ENABLED = true
+    resetAssetUsage()
     $('.assets-btns').show()
     $('.start-screen').hide(); 
     setup()
     loop(0) 
+    setTimeout(_ => CREATION_ENABLED = true, 50)
 }
 
 function selectMapAsset(asset){
