@@ -1,7 +1,11 @@
 const onStart = () => { 
+    CREATION_ENABLED = false
+    $('#paused-msg').hide()
     $('.start-screen').hide(); 
     $('.gameover-screen').hide()
+    $('.pause-btn').text('Pause')
     resetGame()
+    loadGame()
 }
 
 loadGame = () => {
@@ -15,32 +19,47 @@ loadGame = () => {
             return
         }
         setTimeout(_ => {
+            noLoop()
             start -= 1
             loadCounter()
         }, 1000)
     }())
 }
 
-$('.start-game').click(onStart)
-$('.main-menu-navi-btn').click(() => {
-    noLoop()
+function mainMenu(){
+    $('.assets-btns').hide()
+    $('.gameover-screen').hide()
+    $('#paused-msg').hide()
     $('.start-screen').show()
-})
-// loadGame()
+    resetGame()
+}
 
-$('.restart-btn').click(onStart)
-$('.pause-btn').click(_ => {
+function pause(){
     if( $('.pause-btn').text().trim().toLowerCase() == 'pause'){
         noLoop()
+        $('#paused-msg').show()
         $('.pause-btn').text('Continue')
         return
     }
-    loop()
+    $('#paused-msg').hide()
     $('.pause-btn').text('Pause')
-})
+    loop()
+}
 
 function updateFinalScore(score, lastedFor){
     $('#score').text(score)
     $('#lastedFor').text(lastedFor)
 }
 
+
+function loadCreationCenter(){
+    CREATION_ENABLED = true
+    $('.assets-btns').show()
+    $('.start-screen').hide(); 
+    setup()
+    loop(0) 
+}
+
+function selectMapAsset(asset){
+    tileInHand = asset
+}

@@ -5,11 +5,10 @@
     <link rel="stylesheet" type="text/css" href="global.css">
     <body>
         <div class="game-mode">
-
             <div>
-                <button class="restart-btn">Restart</button>
-                <button class="pause-btn">Pause</button>
-                <button class="main-menu-navi-btn">Main Menu</button>
+                <button class="restart-btn" onclick="onStart()">Restart</button>
+                <button class="pause-btn" onclick="pause()">Pause</button>
+                <button class="main-menu-navi-btn" onclick = "mainMenu()">Main Menu</button>
             </div>
             <div id="score">&nbsp;</div>
         </div>
@@ -18,8 +17,8 @@
             <div class="overlap-bg"></div>
             <div class="gameover-message">
                 <p id='gameover-msg'>Game Over</p>
-                <button class="restart-btn"> Restart </button>
-                <button class="main-menu-navi-btn">Main Menu</button>
+                <button class="restart-btn" onclick="onStart()"> Restart </button>
+                <button class="main-menu-navi-btn" onclick = "mainMenu()">Main Menu</button>
             </div>
         </div>
 
@@ -30,24 +29,35 @@
             </div>
         </div>
 
+        <p id='paused-msg' hidden>Paused</p>
+
         <div class="start-screen">
             <div class="overlap-bg"></div>
             <div class="start-bg">
-                <div class="screen-message start-game">Start</div>
-                <div class="screen-message create-map">Create Map</div>
+                <div class="screen-message start-game" onclick="onStart()">Start</div>
+                <div class="screen-message create-map" onclick="loadCreationCenter()">Create Map</div>
                 <div class="screen-message load-map">Load Map</div>
             </div>
         </div>
 
+        <div class="assets-btns" hidden>
+            <div class="asset-btn wall" onclick="selectMapAsset('wall')">Walls</div>
+            <div class="asset-btn enemy" onclick="selectMapAsset('enemy')">Enemies</div>
+            <div class="asset-btn food" onclick="selectMapAsset('food')">food</div>
+            <div class="asset-btn energy" onclick="selectMapAsset('energy')">Energies</div>
+        </div>
+        
+
     </body>
-    <script id='brainScript' src="pacman/brain.js"></script>
+    <script src="config.js">            </script>
+    <script src="pacman/brain.js">      </script>
     <script src="GUI/renderListener.js"></script>
-    <script src="uiListeners.js"></script>
-    <script src="pacman/player.js"></script>
-    <!-- <script src="config.js"></script> -->
-    <script src="pacman/playground.js"></script>
-    <script src="pacman/wall.js"></script>
-    <script src="pacman/enemy.js"></script>
-    <script src="pacman/node.js"></script>
-    <script src="pacman/pathfinder.js"></script>
+    <script src="uiListeners.js">       </script>
+    <script src="pacman/player.js">     </script>
+    <script src="pacman/playground.js"> </script>
+    <script src="pacman/wall.js">       </script>
+    <script src="pacman/enemy.js">      </script>
+    <script src="pacman/node.js">       </script>
+    <script src="pacman/pathfinder.js"> </script>
+    <script src="pacman/mapCreation.js"> </script>
 </html>

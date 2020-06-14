@@ -4,6 +4,7 @@
 }
 
 html{
+    user-select: none;
     background-color: darkblue;
     text-align: center;
 }
@@ -51,7 +52,7 @@ html{
     font-weight: 800;
 }
 
-#load-msg{
+#load-msg, #paused-msg{
     z-index: 999999;
     position: absolute;
     background: #000;
@@ -69,7 +70,7 @@ html{
     color: #fff;
     font-size: 35px;
     padding: 55px;
-    margin-left: 35%;
+    margin-left: 40%;
     top: 25%;
     z-index: 999999999999999;
     background-color: gray;
@@ -83,4 +84,22 @@ html{
     cursor: pointer;
     margin: 10px;
     background-color: #000;
+}
+
+.assets-btns{
+    position: absolute;
+    right: 0%;
+    background: none;
+    padding: 10px 0px 10px 10px;
+}
+
+.asset-btn{
+    cursor: pointer;
+    color: #fff;
+    font-size: 23px !important;
+    font-size: 14px;
+    margin: 11px;
+    padding: 9px;
+    background-color: black;
+    border-radius: 22px 0px 0px 22px;
 }
