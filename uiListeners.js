@@ -1,6 +1,9 @@
 const creationBtns = ['food', 'energy', 'enemy', 'wall', 'pacman']
 const onStart = () => { 
+    IS_CREATION_DATA = false;
     CREATION_ENABLED = false
+    $('.pause-btn').show()
+    $('.restart-btn').show()
     $('#paused-msg').hide()
     $('.start-screen').hide(); 
     $('.gameover-screen').hide()
@@ -28,11 +31,16 @@ loadGame = () => {
 }
 
 function mainMenu(){
-    $('.assets-btns').hide()
     $('.gameover-screen').hide()
     $('#paused-msg').hide()
     $('.start-screen').show()
+    hideAssetBtns()
     resetGame()
+}
+
+function hideAssetBtns(){
+    // [...creationBtns, 'dragMode', 'reset'].forEach(i => $(`.${i}`).show())
+    $('.assets-btns').hide()
 }
 
 function pause(){
@@ -54,6 +62,7 @@ function updateFinalScore(score, lastedFor){
 
 
 function loadCreationCenter(){
+    $('#score').text('')
     $('.pause-btn').hide()
     $('.restart-btn').hide()
     removeAndAddAssetClass('wall')
@@ -66,7 +75,10 @@ function loadCreationCenter(){
         CREATION_ENABLED = true
         disableDragMode()
         creationBtns.forEach(b => $(`.${b}`).text($(`.${b}`).text().split(' ')[0].trim()+ " ("+assetLimit[b]+")"));
-    }, 50)
+    }, 50);
+    //
+    ['dragMode', 'reset', ...creationBtns].forEach(i => $(`.${i}`).show())
+    $('.testMode').text('Test Mode')    
 }
 
 function selectMapAsset(asset){
@@ -111,12 +123,16 @@ function toggleDragMode(){
     disableDragMode()
 }
 
-function test(){
-    // CREATION_ENABLED = false;
-    // IS_CREATION_DATA = true;
-    // setup()
-    // loop()
-    // frameRate(60)
+function toggleTestMap(){
+    const toggleMap = $('.testMode')
+    const isEditMode = toggleMap.text().trim().toLowerCase() == 'map mode'
+    toggleMap.text(isEditMode ? 'Test Mode' : 'Map Mode');
+    ['dragMode', 'reset', ...creationBtns].forEach(i => $(`.${i}`)[isEditMode ? 'show' : 'hide']())
+    CREATION_ENABLED = isEditMode ? true : false
+    IS_CREATION_DATA = true;
+    setup()
+    loop()
+    frameRate(60)
 }
 
 function downloadConfig(){

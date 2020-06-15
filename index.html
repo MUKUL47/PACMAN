@@ -32,7 +32,9 @@
         <p id='paused-msg' hidden>Paused</p>
 
         <div class="start-screen">
-            <div class="overlap-bg"></div>
+            <div class="overlap-bg black-screen-bg">
+                <img src="/assets/mainscreen.gif"/>
+            </div>
             <div class="start-bg">
                 <div class="screen-message start-game" onclick="onStart()">Start</div>
                 <div class="screen-message create-map" onclick="loadCreationCenter()">Create Map</div>
@@ -48,8 +50,8 @@
             <div class="asset-btn pacman" onclick="selectMapAsset('pacman')">Pacman</div>
             <div class="asset-btn reset red-bg" onclick="selectMapAsset('reset')">Reset</div>
             <div class="asset-btn dragMode" onclick="toggleDragMode()" value="off">Enable Drag Mode</div>
-            <div class="asset-btn" onclick="test()" value="off">TEST</div>
-            <a class="asset-btn" onclick="downloadConfig()" value="off" id='downloadLink' href="" download>Download Config</a>
+            <div class="asset-btn testMode" onclick="toggleTestMap()" value="off">Test Map</div>
+            <a hidden class="asset-btn" onclick="downloadConfig()" value="off" id='downloadLink' href="" download>Download Config</a>
         </div>
         
 

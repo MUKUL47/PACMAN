@@ -115,3 +115,8 @@ html{
 .red-bg{ background-color: red; }
 
 .brown-bg{ background-color: brown; }
+
+.black-screen-bg{
+    opacity: 1 !important;
+    background: black;
+}

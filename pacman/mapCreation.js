@@ -21,6 +21,9 @@ function mouseClicked(){
             isDrag = false;
             return
         }
+        if(selectedTile[x+","+y].tile != tileInHand){
+            return //later replace asset
+        }
         assetLimit[tileInHand] += 1
         updateAssetLimit(assetLimit[tileInHand])
         startLoadingIntoArray(tileInHand, false, x, y)
@@ -32,9 +35,9 @@ function mouseClicked(){
     updateAssetLimit(assetLimit[tileInHand])
     startLoadingIntoArray(tileInHand, true, x, y)
     if(tileInHand == 'enemy'){
-        selectedTile[x+","+y] = { tile : tileInHand, id : assetLimit[tileInHand] }
+        selectedTile[x+","+y] = { tile : tileInHand, id : assetLimit[tileInHand], pos : x+","+y }
     }else{
-        selectedTile[x+","+y] = tileInHand
+        selectedTile[x+","+y] = { tile : tileInHand, id : assetLimit[tileInHand], pos : x+","+y }
     }
     isDrag = false;
 }   
@@ -52,7 +55,7 @@ function initFloorTiling(){
             const isTile = selectedTile[j+","+i]
             const enemyTileId = isTile && isTile.tile ? isTile.id : false
             if(isTile){
-                image(getTile(isTile.tile ? isTile.tile : isTile, enemyTileId), j * 40, i * 40, 40, 40)
+                image(getTile(isTile.tile, enemyTileId), j * 40, i * 40, 40, 40)
             }else{
                 fill(color(0, 0, 255));
                 rect(j*40,i*40,40,40);
@@ -104,6 +107,12 @@ function resetAssetUsage(){
         pacman : 1,
         enemy : 4
     }
+    resetCustomAsset()
+    CREATION_ENABLED = true;
+    IS_CREATION_DATA = false;
+}
+
+function resetCustomAsset(){
     manualWalls = new Array() 
     manualFood = {}
     manualEnergy = {}
@@ -131,25 +140,27 @@ function getTile(tile, enemyId){
 }
 
 function overwriteDefaultConfig(){
-    // nodes = {};
-    // for(let i = 0; i < NODES.x; i++){
-    //     for(let j = 0; j < NODES.y; j++){
-    //             if(getObjectIndex(manualWalls, i, j) < 0){
-    //                 nodes[i+","+j] = new Node(i, j)
-    //             }
-    //     }   
-    // }
-    // walls = manualWalls
-    // energyBar = manualEnergy
-    // foodItems = manualFood
-    // DEFAULT_LOCATIONS = manualEnemyDefaultLocations
-    pacmanData = {
-        walls : manualWalls,
-        energyBar : manualEnergy,
-        foodItems : manualFood,
-        DEFAULT_LOCATIONS : manualEnemyDefaultLocations,
-        // nodes : nodes,
-        PLAYER_START : manualPlayerStart
+    nodes = {};
+    // walls = [], energyBar = {}, foodItems = {}, DEFAULT_LOCATIONS = {}, PLAYER_START = {}
+    for(let i = 0; i < NODES.x; i++){
+        for(let j = 0; j < NODES.y; j++){
+                if(getObjectIndex(manualWalls, i, j) < 0){
+                    nodes[i+","+j] = new Node(i, j)
+                }
+        }   
     }
-    // PLAYER_START = manualPlayerStart
+    walls = manualWalls
+    energyBar = manualEnergy
+    foodItems = manualFood
+    DEFAULT_LOCATIONS = manualEnemyDefaultLocations
+    console.log('fooditems =', foodItems.length)
+    // pacmanData = {
+    //     walls : manualWalls,
+    //     energyBar : manualEnergy,
+    //     foodItems : manualFood,
+    //     DEFAULT_LOCATIONS : manualEnemyDefaultLocations,
+    //     // nodes : nodes,
+    //     PLAYER_START : manualPlayerStart
+    // }
+    PLAYER_START = manualPlayerStart
 }

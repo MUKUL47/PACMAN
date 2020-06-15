@@ -44,27 +44,27 @@ class PathFinder{
                 if(nodes[x+","+y]){
                     if(x < NODES.x && nodes[(x+1)+","+y] ){
                         nodes[x+","+y].children[(x+1)+","+y] = nodes[(x+1)+","+y]
-                        // nodes[(x+1)+","+y].parents[x+","+y] = nodes[x+","+y]
-                        // nodes[x+","+y].neighbours[(x+1)+","+y] = nodes[(x+1)+","+y]
                     }
                     if(y < NODES.y    && nodes[x+","+(y+1)] ){
                         nodes[x+","+y].children[x+","+(y+1)] = nodes[x+","+(y+1)]
-                        // nodes[x+","+(y+1)].parents[x+","+y] = nodes[x+","+y]
-                        // nodes[x+","+y].neighbours[x+","+(y+1)] = nodes[x+","+(y+1)]
                     }
                     if( y > 0 && nodes[x+","+(y-1)]){
                         nodes[x+","+y].children[x+","+(y-1)] = nodes[x+","+(y-1)]
-                        // nodes[x+","+(y-1)].parents[x+","+y] = nodes[x+","+y]
-                        // nodes[x+","+y].neighbours[x+","+(y-1)] = nodes[x+","+(y-1)]
                     }
                     if( x > 0 && nodes[(x-1)+","+y]){
                         nodes[x+","+y].children[(x-1)+","+y] = nodes[(x-1)+","+y]
-                        // nodes[(x-1)+","+y].parents[x+","+y] = nodes[x+","+y]
-                        // nodes[x+","+y].neighbours[(x-1)+","+y] = nodes[(x-1)+","+y]
                     }
                 }
             }   
         }
+    }
+
+    static validateMap(source, target){
+        /**
+         * iterate from source to target, 
+         * if target unreachable  => false or true
+         * 
+         */
     }
 }
 

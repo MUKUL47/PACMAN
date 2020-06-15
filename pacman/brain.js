@@ -17,6 +17,12 @@ function preload() {
     enemyStripes    = [enemy.red, enemy.yellow, enemy.blue, enemy.pink]
     enemy.dead      = loadImage('assets/dead_pacman.png')
     enemy.deadMode  = loadImage('assets/ghostDead.jpg')
+    PLAYER_START = {x : 10, y : 15}
+    DEFAULT_LOCATIONS = 
+        [{ x : 0,   y : 0   }, 
+         { x : 0,   y : 19  }, 
+         { x : 19,  y : 0   }, 
+         { x : 19,  y : 19  }]
 }
 
 function resetGame(){
@@ -88,32 +94,38 @@ function contactWithPlayer(ghost){
                 return;
              }
              noLoop()
+             if(IS_CREATION_DATA) {
+                toggleTestMap()
+                return
+             }
              $('.gameover-screen').show()
         }
     }
 
 
 function init(){
-    for(let i = 0; i < NODES.x; i++){
-        for(let j = 0; j < NODES.y; j++){
-                nodes[j+","+i] = new Node(j, i)
-                if(GET_RAND(3,0) == 2 && 
-                ENEMY_X.indexOf(j) == -1 && 
-                ENEMY_Y.indexOf(i) == -1 &&
-                PLAYER_START.x != j && 
-                PLAYER_START.y != i
-                )
-                { delete nodes[j+","+i]; walls.push(new Wall(j, i)) }
-
-                else if(GET_RAND(25, 0) == 0){ foodItems[j+','+i] = new Food(j, i) }
-
-                else if(GET_RAND(75, 0) == 0){ energyBar[j+','+i] = new Energy(j, i) }
-        }   
-    }
     if(IS_CREATION_DATA){
         overwriteDefaultConfig()
         player = new Player(PLAYER_START.x, PLAYER_START.y)
+    }else{
+        for(let i = 0; i < NODES.x; i++){
+            for(let j = 0; j < NODES.y; j++){
+                    nodes[j+","+i] = new Node(j, i)
+                    if(GET_RAND(3,0) == 2 && 
+                    ENEMY_X.indexOf(j) == -1 && 
+                    ENEMY_Y.indexOf(i) == -1 &&
+                    PLAYER_START.x != j && 
+                    PLAYER_START.y != i
+                    )
+                    { delete nodes[j+","+i]; walls.push(new Wall(j, i)) }
+    
+                    else if(GET_RAND(25, 0) == 0){ foodItems[j+','+i] = new Food(j, i) }
+    
+                    else if(GET_RAND(75, 0) == 0){ energyBar[j+','+i] = new Energy(j, i) }
+            }   
+        }
     }
+
     PathFinder.mapToNodes()
     let ghostRoute = [];
     DEFAULT_LOCATIONS.forEach(location => {

@@ -104,6 +104,7 @@ class Player{
         let f = Object.values(foodItems).filter(food => Math.abs(food.y - this.y) <=0.5 && Math.abs(food.x - this.x) <=0.5)[0]
         if(f){
             delete foodItems[f.x+','+f.y]
+            if(IS_CREATION_DATA || CREATION_ENABLED) return
             totalFoodItems += 1;
             document.getElementById("score").innerHTML = `Score : ${totalFoodItems}`
         }
