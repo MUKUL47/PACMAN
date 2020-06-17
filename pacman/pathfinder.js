@@ -81,9 +81,6 @@ class PathFinder{
                 }
             })
         }
-        // let set = new Set()
-        // visitedNodes.forEach(node => set.add(node))
-        // set = Array.from(set)
         const targetVisitedNodes = targetPostions.filter(target => verticies.indexOf(target) > -1)
         return { isValid : true }
         return targetVisitedNodes.length == targetPostions.length ? { isValid : true } : { isValid : false }
