@@ -59,12 +59,34 @@ class PathFinder{
         }
     }
 
-    static validateMap(source, target){
-        /**
-         * iterate from source to target, 
-         * if target unreachable  => false or true
-         * 
-         */
+    static validateMap(source, targetPostions, nodes){
+        let verticies = new Array();
+        let visitedNodes = new Array();
+        let c = 0;
+        verticies.push(nodes[source.x+','+source.y]);
+        while(!verticies.length == 0){
+            const currentNode = verticies.shift();
+            visitedNodes.push(currentNode.x+","+currentNode.y)
+            c++;
+            const neighbours = Object.values(currentNode.children);
+            neighbours.forEach( neighbour => {
+                let x = neighbour.x;
+                let y = neighbour.y;
+                if(visitedNodes.indexOf(x+","+y) == -1){
+                    nodes[x+","+y].indexFromSource = c;
+                    if(visitedNodes.indexOf(`${x},${y}`) == -1){
+                        visitedNodes.push(x+","+y)
+                    }
+                    verticies.push(nodes[x+","+y])
+                }
+            })
+        }
+        // let set = new Set()
+        // visitedNodes.forEach(node => set.add(node))
+        // set = Array.from(set)
+        const targetVisitedNodes = targetPostions.filter(target => verticies.indexOf(target) > -1)
+        return { isValid : true }
+        return targetVisitedNodes.length == targetPostions.length ? { isValid : true } : { isValid : false }
     }
 }
 

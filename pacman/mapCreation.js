@@ -139,7 +139,36 @@ function getTile(tile, enemyId){
     }
 }
 
+function validateCustomMap(){
+    if(!manualPlayerStart['x']) return { isValid : false, message : 'Pacman is missing' }
+    /**
+     * **IMPROVEMENT
+     * GO FROM TARGET TO SOURCE
+     */
+    const source = {}
+    Object.assign(source, manualPlayerStart)
+    const targets = [...Object.values(manualEnergy), ...Object.values(manualFood), ...manualEnemyDefaultLocations].filter(m => m.x != undefined)
+    let targetDestinations = []
+    targets.forEach(target => {
+        const obj = {}
+        Object.assign(obj, target)
+        targetDestinations.push(`${obj.x},${obj.y}`)
+    })
+    const nodes = filterNodesWithWalls()
+    PathFinder.mapToNodes()
+    return PathFinder.validateMap(source, targetDestinations, nodes)
+}
+
 function overwriteDefaultConfig(){
+    filterNodesWithWalls()
+    walls = manualWalls
+    energyBar = manualEnergy
+    foodItems = manualFood
+    DEFAULT_LOCATIONS = manualEnemyDefaultLocations
+    PLAYER_START = manualPlayerStart
+}
+
+function filterNodesWithWalls(){
     nodes = {};
     // walls = [], energyBar = {}, foodItems = {}, DEFAULT_LOCATIONS = {}, PLAYER_START = {}
     for(let i = 0; i < NODES.x; i++){
@@ -149,18 +178,5 @@ function overwriteDefaultConfig(){
                 }
         }   
     }
-    walls = manualWalls
-    energyBar = manualEnergy
-    foodItems = manualFood
-    DEFAULT_LOCATIONS = manualEnemyDefaultLocations
-    console.log('fooditems =', foodItems.length)
-    // pacmanData = {
-    //     walls : manualWalls,
-    //     energyBar : manualEnergy,
-    //     foodItems : manualFood,
-    //     DEFAULT_LOCATIONS : manualEnemyDefaultLocations,
-    //     // nodes : nodes,
-    //     PLAYER_START : manualPlayerStart
-    // }
-    PLAYER_START = manualPlayerStart
+    return nodes
 }

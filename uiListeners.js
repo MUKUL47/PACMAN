@@ -126,6 +126,13 @@ function toggleDragMode(){
 function toggleTestMap(){
     const toggleMap = $('.testMode')
     const isEditMode = toggleMap.text().trim().toLowerCase() == 'map mode'
+    if(!isEditMode){
+        const validate = validateCustomMap()
+        if(!validate.isValid){
+            alert(`Invalid configurations${validate.message ? " : "+validate.message : ''}`)
+            return
+        }
+    }
     toggleMap.text(isEditMode ? 'Test Mode' : 'Map Mode');
     ['dragMode', 'reset', ...creationBtns].forEach(i => $(`.${i}`)[isEditMode ? 'show' : 'hide']())
     CREATION_ENABLED = isEditMode ? true : false
