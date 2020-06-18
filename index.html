@@ -43,15 +43,16 @@
         </div>
 
         <div class="assets-btns" hidden>
-            <div class="asset-btn wall" onclick="selectMapAsset('wall')">Wall</div>
-            <div class="asset-btn enemy" onclick="selectMapAsset('enemy')">Enemy</div>
-            <div class="asset-btn food" onclick="selectMapAsset('food')">Food</div>
-            <div class="asset-btn energy" onclick="selectMapAsset('energy')">Energy</div>
-            <div class="asset-btn pacman" onclick="selectMapAsset('pacman')">Pacman</div>
+            <div class="asset-btn" onclick="alert('Pacman must be reachable to all objects (food, energy and ghost)')">Rules</div>
+            <div class="asset-btn wall asset-object" onclick="selectMapAsset('wall')">Wall</div>
+            <div class="asset-btn enemy asset-object" onclick="selectMapAsset('enemy')">Enemy</div>
+            <div class="asset-btn food asset-object" onclick="selectMapAsset('food')">Food</div>
+            <div class="asset-btn energy asset-object" onclick="selectMapAsset('energy')">Energy</div>
+            <div class="asset-btn pacman " onclick="selectMapAsset('pacman')">Pacman</div>
             <div class="asset-btn reset red-bg" onclick="selectMapAsset('reset')">Reset</div>
             <div class="asset-btn dragMode" onclick="toggleDragMode()" value="off">Enable Drag Mode</div>
             <div class="asset-btn testMode" onclick="toggleTestMap()" value="off">Test Map</div>
-            <a hidden class="asset-btn" onclick="downloadConfig()" value="off" id='downloadLink' href="" download>Download Config</a>
+            <a class="asset-btn download-a" onclick="downloadConfig()" value="off" id='downloadLink' href="" download>Download Config</a>
         </div>
         
 

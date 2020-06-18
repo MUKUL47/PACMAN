@@ -3,9 +3,9 @@
     font-size: 25px;
 }
 
-html{
+html, body{
     user-select: none;
-    background-color: darkblue;
+    background-color: darkblue !important;
     text-align: center;
 }
 
@@ -119,4 +119,13 @@ html{
 .black-screen-bg{
     opacity: 1 !important;
     background: black;
+}
+
+.asset-object{
+    border: 2px solid !important;
+}
+
+.download-a{
+    text-decoration: none;
+    font-size: 26px !important;
 }

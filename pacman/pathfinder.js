@@ -74,16 +74,16 @@ class PathFinder{
                 let y = neighbour.y;
                 if(visitedNodes.indexOf(x+","+y) == -1){
                     nodes[x+","+y].indexFromSource = c;
-                    if(visitedNodes.indexOf(`${x},${y}`) == -1){
-                        visitedNodes.push(x+","+y)
-                    }
+                    visitedNodes.push(x+","+y)
                     verticies.push(nodes[x+","+y])
                 }
             })
         }
-        const targetVisitedNodes = targetPostions.filter(target => verticies.indexOf(target) > -1)
-        return { isValid : true }
-        return targetVisitedNodes.length == targetPostions.length ? { isValid : true } : { isValid : false }
+        let set = new Set()
+        visitedNodes.forEach(node => set.add(node))
+        set = Array.from(set)
+        const targetVisitedNodes = targetPostions.filter(target => set.indexOf(target) > -1)
+        return { isValid : targetVisitedNodes.length == targetPostions.length }
     }
 }
 

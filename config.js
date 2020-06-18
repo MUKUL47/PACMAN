@@ -52,6 +52,7 @@ let enemyStripes = []
 //_____________________________________________________________________________________________________________________________________________________________
 //creation
 let CREATION_ENABLED = false
+let FREE_HAND = false;
 let manualWalls = {} 
 let manualFood = {}
 let manualEnergy = {}

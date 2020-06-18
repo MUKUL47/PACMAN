@@ -62,6 +62,7 @@ function updateFinalScore(score, lastedFor){
 
 
 function loadCreationCenter(){
+    FREE_HAND = false;
     $('#score').text('')
     $('.pause-btn').hide()
     $('.restart-btn').hide()
@@ -71,14 +72,12 @@ function loadCreationCenter(){
     $('.start-screen').hide(); 
     setup()
     loop() 
-    setTimeout(_ => {
-        CREATION_ENABLED = true
-        disableDragMode()
-        creationBtns.forEach(b => $(`.${b}`).text($(`.${b}`).text().split(' ')[0].trim()+ " ("+assetLimit[b]+")"));
-    }, 50);
-    //
+    CREATION_ENABLED = true
+    disableDragMode()
+    creationBtns.forEach(b => $(`.${b}`).text($(`.${b}`).text().split(' ')[0].trim()+ " ("+assetLimit[b]+")"));
     ['dragMode', 'reset', ...creationBtns].forEach(i => $(`.${i}`).show())
     $('.testMode').text('Test Mode')    
+    setTimeout(() => FREE_HAND = true, 200)
 }
 
 function selectMapAsset(asset){
@@ -129,7 +128,7 @@ function toggleTestMap(){
     if(!isEditMode){
         const validate = validateCustomMap()
         if(!validate.isValid){
-            alert(`Invalid configurations${validate.message ? " : "+validate.message : ''}`)
+            alert(`Invalid configuration${validate.message ? " : "+validate.message : ''}`)
             return
         }
     }
@@ -143,11 +142,10 @@ function toggleTestMap(){
 }
 
 function downloadConfig(){
-    overwriteDefaultConfig()
-    console.log(pacmanData)
-    var dataStr = "data:text;charset=utf-8," + encodeURIComponent(JSON.stringify(pacmanData));
-    var dlAnchorElem = $('#downloadLink');
+    data = overwriteDefaultConfig(true)
+    var dataStr = "data:text;charset=utf-8," + encodeURIComponent(data);
+    var dlAnchorElem = $('.download-a');
     dlAnchorElem.attr("href", dataStr);
-    dlAnchorElem.attr("download", "pacmanconfig");
+    dlAnchorElem.attr("download", `pacmanConfig_${new Date().valueOf()}`);
     dlAnchorElem.click();
 }

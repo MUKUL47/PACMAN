@@ -12,7 +12,7 @@ let tileInHand = 'wall'
 let dragMode = false;
 let pacmanData;
 function mouseClicked(){  
-    if(!CREATION_ENABLED) return
+    if(!CREATION_ENABLED || !FREE_HAND) return
     const x = Math.floor(mouseX/40)
     const y = Math.floor(mouseY/40)
     if(x < 0 || x > 19 || y < 0 || y > 19) return
@@ -34,11 +34,7 @@ function mouseClicked(){
     assetLimit[tileInHand] -= 1
     updateAssetLimit(assetLimit[tileInHand])
     startLoadingIntoArray(tileInHand, true, x, y)
-    if(tileInHand == 'enemy'){
-        selectedTile[x+","+y] = { tile : tileInHand, id : assetLimit[tileInHand], pos : x+","+y }
-    }else{
-        selectedTile[x+","+y] = { tile : tileInHand, id : assetLimit[tileInHand], pos : x+","+y }
-    }
+    selectedTile[x+","+y] = { tile : tileInHand, id : assetLimit[tileInHand], pos : x+","+y }
     isDrag = false;
 }   
 
@@ -141,10 +137,6 @@ function getTile(tile, enemyId){
 
 function validateCustomMap(){
     if(!manualPlayerStart['x']) return { isValid : false, message : 'Pacman is missing' }
-    /**
-     * **IMPROVEMENT
-     * GO FROM TARGET TO SOURCE
-     */
     const source = {}
     Object.assign(source, manualPlayerStart)
     const targets = [...Object.values(manualEnergy), ...Object.values(manualFood), ...manualEnemyDefaultLocations].filter(m => m.x != undefined)
@@ -159,13 +151,20 @@ function validateCustomMap(){
     return PathFinder.validateMap(source, targetDestinations, nodes)
 }
 
-function overwriteDefaultConfig(){
+function overwriteDefaultConfig(decode){
     filterNodesWithWalls()
     walls = manualWalls
     energyBar = manualEnergy
     foodItems = manualFood
     DEFAULT_LOCATIONS = manualEnemyDefaultLocations
     PLAYER_START = manualPlayerStart
+    if(decode){
+        return encodePacmanConfig({ walls : walls, energyBar : energyBar, foodItems : foodItems, DEFAULT_LOCATIONS : DEFAULT_LOCATIONS, PLAYER_START : PLAYER_START })
+    }
+}
+
+function encodePacmanConfig(pacmanData){
+    return JSON.stringify(pacmanData).split('').map(c => c.charCodeAt(0))
 }
 
 function filterNodesWithWalls(){
