@@ -151,20 +151,60 @@ function validateCustomMap(){
     return PathFinder.validateMap(source, targetDestinations, nodes)
 }
 
-function overwriteDefaultConfig(decode){
+function overwriteDefaultConfig(encode){
     filterNodesWithWalls()
     walls = manualWalls
     energyBar = manualEnergy
     foodItems = manualFood
     DEFAULT_LOCATIONS = manualEnemyDefaultLocations
     PLAYER_START = manualPlayerStart
-    if(decode){
-        return encodePacmanConfig({ walls : walls, energyBar : energyBar, foodItems : foodItems, DEFAULT_LOCATIONS : DEFAULT_LOCATIONS, PLAYER_START : PLAYER_START })
+    if(encode){
+        return encodePacmanConfig(
+            {   walls : walls, 
+                energyBar : energyBar, 
+                foodItems : foodItems, 
+                DEFAULT_LOCATIONS : DEFAULT_LOCATIONS, 
+                PLAYER_START : PLAYER_START 
+            })
     }
 }
 
 function encodePacmanConfig(pacmanData){
     return JSON.stringify(pacmanData).split('').map(c => c.charCodeAt(0))
+}
+
+function renderConfig(rawData){
+    const config = decodePacmanConfig(rawData);
+    if(!config) {
+        alert('Invalid config file')
+        return
+    }
+    loadCreationCenter()     
+
+    config.walls.forEach(wall => uploadCustom('wall', wall.x, wall.y))
+    Object.values(config.foodItems).forEach(food => uploadCustom('food', food.x, food.y))
+    Object.values(config.energyBar).forEach(energy => uploadCustom('energy', energy.x, energy.y))
+    Object.values(config.DEFAULT_LOCATIONS).forEach(enemy => uploadCustom('enemy', enemy.x, enemy.y))
+    if(config.PLAYER_START.x) uploadCustom('pacman', config.PLAYER_START.x, config.PLAYER_START.y)
+
+    function uploadCustom(tile, x, y){
+        tileInHand = tile;
+        assetLimit[tile] -= 1
+        updateAssetLimit(assetLimit[tile])
+        startLoadingIntoArray(tile, true, x, y)
+        selectedTile[x+","+y] = { tile : tile, id : assetLimit[tile], pos : x+","+y }
+    }
+    tileInHand = 'wall'
+}
+
+
+
+function decodePacmanConfig(encodedConfig){
+   try{
+        return JSON.parse(encodedConfig.split(',').map(c => String.fromCharCode(c)).join(''))
+   }catch(e){
+        return false
+   }
 }
 
 function filterNodesWithWalls(){
