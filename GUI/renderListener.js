@@ -1,5 +1,5 @@
 
-let screenDimension = false;
+let canvasDimension = false;
 
 (function(){
     if(!isElectron) return
@@ -8,7 +8,7 @@ let screenDimension = false;
         if(screen.height <= 800){
             $('#defaultCanvas0').ready(e => {
                 setTimeout(_ => {
-                    screenDimension = screen.height - 175
+                    canvasDimension = screen.height - 175
                     resizeCurrentCanvas()
                 },50)
             })
@@ -18,7 +18,7 @@ let screenDimension = false;
 }())
 
 function resizeCurrentCanvas(){
-    if(!screenDimension) return
-     $('#defaultCanvas0').css('height', screenDimension)
-     $('#defaultCanvas0').css('width', screenDimension)
+    if(!canvasDimension) return
+     $('#defaultCanvas0').css('height', canvasDimension)
+     $('#defaultCanvas0').css('width', canvasDimension)
 }
