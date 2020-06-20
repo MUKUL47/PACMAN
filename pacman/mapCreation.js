@@ -180,13 +180,11 @@ function renderConfig(rawData){
         return
     }
     loadCreationCenter()     
-
     config.walls.forEach(wall => uploadCustom('wall', wall.x, wall.y))
     Object.values(config.foodItems).forEach(food => uploadCustom('food', food.x, food.y))
     Object.values(config.energyBar).forEach(energy => uploadCustom('energy', energy.x, energy.y))
     Object.values(config.DEFAULT_LOCATIONS).forEach(enemy => uploadCustom('enemy', enemy.x, enemy.y))
     if(config.PLAYER_START.x) uploadCustom('pacman', config.PLAYER_START.x, config.PLAYER_START.y)
-
     function uploadCustom(tile, x, y){
         tileInHand = tile;
         assetLimit[tile] -= 1
