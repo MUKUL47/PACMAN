@@ -12,7 +12,7 @@ app.on('ready', function() {
   let dirname = __dirname.split('/')
   dirname.pop()
   dirname = 'file://'+ dirname.join('/') + '/index.html'
-  mainWindow.loadURL(dirname)
+  mainWindow.loadURL('http://localhost:3300')
 })
 
-ipcMain.on('getScreenSize', e => e.sender.send('gotScreenSize', screen.getPrimaryDisplay().workAreaSize))
+// ipcMain.on('getScreenSize', e => e.sender.send('gotScreenSize', screen.getPrimaryDisplay().workAreaSize))

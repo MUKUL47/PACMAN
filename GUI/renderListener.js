@@ -18,7 +18,7 @@ let canvasDimension = false;
 }())
 
 function resizeCurrentCanvas(){
-    if(!canvasDimension) return
+    if(screen.height > 800) return
      $('#defaultCanvas0').css('height', canvasDimension)
      $('#defaultCanvas0').css('width', canvasDimension)
 }

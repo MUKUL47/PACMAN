@@ -173,6 +173,13 @@ function toggleHide(hideElements, showElements) {
   showElements.forEach((showElement) => $(showElement).show());
 }
 
+function resizeCurrentCanvas(){
+  if(screen.height > 800) return
+   $('#defaultCanvas0').css('height', 580)
+   $('#defaultCanvas0').css('width', 580)
+}
+
+
 $('.uploadConfig').on('change',function(evt){
     var f = evt.target.files[0]; 
     if (f){

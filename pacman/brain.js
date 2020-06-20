@@ -43,7 +43,7 @@ function setup() {
   noLoop(); //game will be paused during main menu setup will be re-triggering once player hits PLAY
   frameRate(FRAME_RATE);
   createCanvas(CANVAS_SIZE, CANVAS_SIZE);
-  if(isElectron) resizeCurrentCanvas()
+  resizeCurrentCanvas()
   initInstance();
   init();
   renderer();
