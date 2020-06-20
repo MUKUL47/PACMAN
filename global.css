@@ -86,6 +86,7 @@ body {
   border-radius: 10px;
   cursor: pointer;
   margin: 10px;
+  width: 200px;
   background-color: #000;
 }
 
