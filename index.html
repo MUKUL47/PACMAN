@@ -5,12 +5,10 @@
     <link rel="stylesheet" type="text/css" href="global.css">
     <body>
         <div class="game-mode">
-
             <div>
-                <button class="restart-btn">Restart</button>
-                <span>
-                    <button class="pause-btn">Pause</button>
-                </span>
+                <button class="restart-btn" onclick="onStart()">Restart</button>
+                <button class="pause-btn" onclick="pause()">Pause</button>
+                <button class="main-menu-navi-btn" onclick = "mainMenu()">Main Menu</button>
             </div>
             <div id="score">&nbsp;</div>
         </div>
@@ -19,7 +17,8 @@
             <div class="overlap-bg"></div>
             <div class="gameover-message">
                 <p id='gameover-msg'>Game Over</p>
-                <button class="restart-btn"> Restart </button>
+                <button class="restart-btn" onclick="onStart()"> Restart </button>
+                <button class="main-menu-navi-btn" onclick = "mainMenu()">Main Menu</button>
             </div>
         </div>
 
@@ -30,15 +29,45 @@
             </div>
         </div>
 
+        <p id='paused-msg' hidden>Paused</p>
+
+        <div class="start-screen">
+            <div class="overlap-bg black-screen-bg">
+                <img src="/assets/mainscreen.gif"/>
+            </div>
+            <div class="start-bg">
+                <div class="screen-message start-game" onclick="onStart()">Start</div>
+                <div class="screen-message create-map" onclick="loadCreationCenter()">Create Map</div>
+                <div class="screen-message load-map">Load Map</div>
+            </div>
+        </div>
+
+        <div class="assets-btns" hidden>
+            <div class="asset-btn" onclick="alert('Pacman must be reachable to all objects (food, energy and ghost)')">Rules</div>
+            <div class="asset-btn wall asset-object" onclick="selectMapAsset('wall')">Wall</div>
+            <div class="asset-btn enemy asset-object" onclick="selectMapAsset('enemy')">Enemy</div>
+            <div class="asset-btn food asset-object" onclick="selectMapAsset('food')">Food</div>
+            <div class="asset-btn energy asset-object" onclick="selectMapAsset('energy')">Energy</div>
+            <div class="asset-btn pacman " onclick="selectMapAsset('pacman')">Pacman</div>
+            <div class="asset-btn reset red-bg" onclick="selectMapAsset('reset')">Reset</div>
+            <div class="asset-btn dragMode" onclick="toggleDragMode()" value="off">Enable Drag Mode</div>
+            <div class="asset-btn testMode" onclick="toggleTestMap()" value="off">Test Map</div>
+            <a class="asset-btn download_upload download-a" onclick="downloadConfig()" value="off" id='downloadLink' href="" download>Download Config</a>
+            <br/>
+            <input type="file" class="asset-btn download_upload uploadConfig" />
+        </div>
+        
+
     </body>
-    <script src="pacman/brain.js"></script>
+    <script src="config.js">            </script>
+    <script src="pacman/brain.js">      </script>
     <script src="GUI/renderListener.js"></script>
-    <script src="uiListeners.js"></script>
-    <script src="pacman/player.js"></script>
-    <!-- <script src="config.js"></script> -->
-    <script src="pacman/playground.js"></script>
-    <script src="pacman/wall.js"></script>
-    <script src="pacman/enemy.js"></script>
-    <script src="pacman/node.js"></script>
-    <script src="pacman/pathfinder.js"></script>
+    <script src="uiListeners.js">       </script>
+    <script src="pacman/player.js">     </script>
+    <script src="pacman/playground.js"> </script>
+    <script src="pacman/wall.js">       </script>
+    <script src="pacman/enemy.js">      </script>
+    <script src="pacman/node.js">       </script>
+    <script src="pacman/pathfinder.js"> </script>
+    <script src="pacman/mapCreation.js"> </script>
 </html>

@@ -1,66 +1,142 @@
-.game-mode{
-    color: #ffffff;
-    font-size: 25px;
+.game-mode {
+  color: #ffffff;
+  font-size: 25px;
 }
 
-html{
-    background-color: darkblue;
-    text-align: center;
+html,
+body {
+  user-select: none;
+  background-color: darkblue !important;
+  text-align: center;
 }
 
-.overlap-bg{
-    position: absolute;
-    z-index: 999;
-    background: darkgray;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    opacity: 0.3;
+.overlap-bg {
+  position: absolute;
+  z-index: 999;
+  background: darkgray;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
 }
 
-
-.gameover-message{
-    text-align: center;
-    padding: 20px;
-    width: 146px;
-    margin: 0 auto;
-    /* margin-left: 50%; */
-    z-index: 1002;
-    border: 1px solid #fff;
-    background: cornflowerblue;
-    border-radius: 10px;
-    position: absolute;
-    left: 40%;
-    top: 30%;
+.gameover-message {
+  text-align: center;
+  padding: 20px;
+  width: 200px;
+  margin: 0 auto;
+  /* margin-left: 50%; */
+  z-index: 1002;
+  border: 1px solid #fff;
+  background: cornflowerblue;
+  border-radius: 10px;
+  position: absolute;
+  left: 40%;
+  top: 30%;
 }
 
-#gameover-msg{
-    font-size: 22px;
-    font-weight: bold;
+#gameover-msg {
+  font-size: 22px;
+  font-weight: bold;
 }
 
-.restart-btn, .pause-btn{
-    background: #000;
-    border: none;
-    width: 90px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    color: green;
-    padding: 5px;
-    font-weight: 800;
+.restart-btn,
+.pause-btn,
+.main-menu-navi-btn {
+  background: #000;
+  border: none;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: green;
+  padding: 5px;
+  font-weight: 800;
 }
 
-#load-msg{
-    z-index: 999999;
-    position: absolute;
-    background: #000;
-    color: #fff;
-    width: 20%;
-    left: 40%;
-    top: 25%;
-    opacity: 0.8;
-    font-size: 36px;
-    border-radius: 9px;
+#load-msg,
+#paused-msg {
+  z-index: 999999;
+  position: absolute;
+  background: #000;
+  color: #fff;
+  width: 20%;
+  left: 40%;
+  top: 25%;
+  opacity: 0.8;
+  font-size: 36px;
+  border-radius: 9px;
+}
+
+.start-bg {
+  position: absolute;
+  color: #fff;
+  font-size: 35px;
+  padding: 55px;
+  margin-left: 40%;
+  top: 25%;
+  z-index: 999999999999999;
+  background-color: gray;
+  border-radius: 9px;
+}
+
+.screen-message {
+  padding: 14px;
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 10px;
+  background-color: #000;
+}
+
+.assets-btns {
+  position: absolute;
+  right: 0%;
+  background: none;
+  padding: 10px 0px 10px 10px;
+}
+
+.asset-selected {
+  border: blue !important;
+  background: blueviolet !important;
+  color: black !important;
+  font-weight: bolder !important;
+}
+
+.asset-btn {
+  width: 200px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 23px !important;
+  font-size: 14px;
+  margin: 11px;
+  padding: 9px;
+  background-color: black;
+  border-radius: 22px 0px 0px 22px;
+}
+
+.red-bg {
+  background-color: red;
+}
+
+.brown-bg {
+  background-color: brown;
+}
+
+.black-screen-bg {
+  opacity: 1 !important;
+  background: black;
+}
+
+.asset-object {
+  border: 2px solid !important;
+}
+
+.download_upload {
+  text-decoration: none;
+  font-size: 21px !important;
+  /* margin-right: 146%; */
+  margin-top: 23px;
+  padding: 6px;
+  border-radius: 15px;
 }
