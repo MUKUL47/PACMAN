@@ -43,6 +43,7 @@ function setup() {
   noLoop(); //game will be paused during main menu setup will be re-triggering once player hits PLAY
   frameRate(FRAME_RATE);
   createCanvas(CANVAS_SIZE, CANVAS_SIZE);
+  resizeCurrentCanvas()
   initInstance();
   init();
   renderer();
@@ -54,7 +55,6 @@ function initInstance() {
   nodes = new Array();
   playground = new Playground(PLAYGROUND_COORD.x, PLAYGROUND_COORD.y);
   player = new Player(PLAYER_START.x, PLAYER_START.y);
-  console.log(walls, walkable, foodItems, nodes, playground, player);
 }
 
 function renderer() {
@@ -102,7 +102,7 @@ function contactWithPlayer(ghost) {
       return;
     }
     noLoop();
-    if (IS_CREATION_DATA) {
+    if (IS_CREATION_DATA && !loadSaveCreation) {
       toggleTestMap();
       return;
     }
@@ -112,6 +112,7 @@ function contactWithPlayer(ghost) {
 
 function init() {
   if (IS_CREATION_DATA) {
+    console.log('creation')
     overwriteDefaultConfig(false);
     player = new Player(PLAYER_START.x, PLAYER_START.y);
   } else {
