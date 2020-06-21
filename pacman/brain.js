@@ -102,7 +102,7 @@ function contactWithPlayer(ghost) {
       return;
     }
     noLoop();
-    if (IS_CREATION_DATA) {
+    if (IS_CREATION_DATA && !loadSaveCreation) {
       toggleTestMap();
       return;
     }
@@ -112,6 +112,7 @@ function contactWithPlayer(ghost) {
 
 function init() {
   if (IS_CREATION_DATA) {
+    console.log('creation')
     overwriteDefaultConfig(false);
     player = new Player(PLAYER_START.x, PLAYER_START.y);
   } else {

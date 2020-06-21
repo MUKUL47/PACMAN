@@ -60,4 +60,5 @@ let manualEnemyDefaultLocations = []
 let manualPlayerStart = {}
 let IS_CREATION_DATA = false;
 ///////////////
+let loadSaveCreation = false;
 

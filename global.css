@@ -74,7 +74,7 @@ body {
   font-size: 35px;
   padding: 55px;
   margin-left: 40%;
-  top: 25%;
+  top: 10%;
   z-index: 999999999999999;
   background-color: gray;
   border-radius: 9px;
@@ -140,4 +140,75 @@ body {
   margin-top: 23px;
   padding: 6px;
   border-radius: 15px;
+}
+
+
+.load-font{
+  font-size: 25px;
+}
+
+#api-gif{
+  position: absolute;
+  width: 50px;
+  top: 0;
+  z-index: 999999999999962;
+}
+
+.api-bg{
+  z-index: 999999999999961;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: #000;
+  opacity: 0.5;
+  position: absolute;
+}
+
+/* table */
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.config-btns{
+  background: black;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+#play-11{
+  border-right: 1px solid;
+}
+/* table */
+
+
+.config-server{
+  margin-left: 25% !important;
+  z-index: 999999999999999 !important;
+}
+
+.close-config{
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #000;
+  border-radius: 40px;
+  width: 33px;
+  font-weight: bold;
+  font-size: 28px;
+  cursor: pointer;
 }

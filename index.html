@@ -39,7 +39,7 @@
             <div class="start-bg">
                 <div class="screen-message start-game" onclick="onStart()">Start</div>
                 <div class="screen-message create-map" onclick="loadCreationCenter()">Create</div>
-                <div class="screen-message load-map">Load</div>
+                <div class="screen-message load-map" onclick="load()">Load</div>
             </div>
         </div>
 
@@ -58,7 +58,23 @@
             <input type="file" class="asset-btn download_upload uploadConfig" />
         </div>
 
-        <div class="load-screen">
+        <div class="load-config" hidden>
+            <div class="overlap-bg black-screen-bg"></div>
+            <div class="start-bg">
+                <div class="screen-message load-font" onclick="loadSystemOrCloudConfig()">Load Config</div>
+                <div class="screen-message load-font" onclick="saveConfigToCloud()">Save Config File</div>
+                <div class="screen-message load-font" onclick="mainMenu()">Main Menu</div>
+            </div>
+            <div hidden class="start-bg config-server"></div>
+            <div>
+                <div class="api-loader" hidden>
+                    <div class="api-bg"></div>
+                    <img id ='api-gif' src='assets/loader.gif' />
+                </div>
+                <span hidden>
+                    <input type='file' id='uploadAndPlay' />
+                </span>
+            </div>
         </div>
         
 
@@ -74,4 +90,5 @@
     <script src="pacman/node.js">       </script>
     <script src="pacman/pathfinder.js"> </script>
     <script src="pacman/mapCreation.js"> </script>
+    <script src="api.js"> </script>
 </html>

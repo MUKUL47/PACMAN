@@ -1,9 +1,9 @@
 const creationBtns = ["food", "energy", "enemy", "wall", "pacman"];
 const onStart = () => {
-  IS_CREATION_DATA = false;
-  CREATION_ENABLED = false;
+  IS_CREATION_DATA = loadSaveCreation ? true : loadSaveCreation;;
+  CREATION_ENABLED = false
   toggleHide(
-    ["#paused-msg", ".start-screen", ".gameover-screen"],
+    ["#paused-msg", ".start-screen", ".gameover-screen", '.load-config'],
     [".pause-btn", ".restart-btn"]
   );
   $(".pause-btn").text("Pause");
@@ -35,7 +35,9 @@ loadGame = () => {
 };
 
 function mainMenu() {
-  toggleHide([".gameover-screen", "#paused-msg"], [".start-screen"]);
+  loadSaveCreation = false;
+  location.reload()
+  toggleHide([".gameover-screen", "#paused-msg",'.load-config'], [".start-screen"]);
   hideAssetBtns();
   resetGame();
 }
@@ -187,6 +189,133 @@ $('.uploadConfig').on('change',function(evt){
           r.onload = function(e){     
           renderConfig(e.target.result)
         };
+        r.readAsText(f);
+    } 
+})
+
+////////////////////////LOAD
+loadType = false
+
+function load(){
+  loadSaveCreation = false;
+  loadType = false
+  IS_CREATION_DATA = false
+  toggleHide([".start-screen", ".pause-btn", ".restart-btn", '.download-a'], [".load-config"]);
+}
+
+async function loadSystemOrCloudConfig(){
+  if(confirm('Load Config : \nCancel = From system | OK = From server')){
+    $('.api-loader').show()
+    const resp = await getConfigs()
+    if(Object.keys(resp).length == 0) {
+      alert('No config(s) found')
+      $('.api-loader').hide()
+      return;
+    }
+    renderConfigFromServer(resp)
+  }else{
+    loadType = 'loadPlay'
+    $('#uploadAndPlay').click()
+  }
+}
+
+async function deleteServerConfig(configId){
+ if(confirm('Are you sure ?')){
+  console.log(configId)
+  $('.api-loader').show()
+  await deleteConfig(configId)
+  renderConfigFromServer(await getConfigs())
+ }
+}
+
+function renderConfigFromServer(configs){
+  $('.api-loader').hide()
+  if(Object.keys(configs).length == 0) {
+    $('.config-server').hide()
+    return;
+  }
+  const htmlObj = 
+  [
+    `<div class='close-config' onclick="$('.config-server').hide()">x</div>
+    <table>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    `
+  ]
+  Object.values(configs).forEach((config, i) => {
+    const innerHtml = 
+    `<tr>
+      <th>${i+1}</th>
+      <th>${config.name}</th>
+      <th>${new Date(config.storedAt).toDateString()}</th>
+      <th style='background:#000'>
+        <div id='${config.config}' class='config-data-${i}'>
+          <button class='config-btns' id='play-11' onclick="playServerConfig('${i}')">Play</button>
+          <button class='config-btns' onclick="deleteServerConfig('${Object.keys(configs)[i]}')">Delete</button>
+        </div>
+      </th>
+    </tr>`
+    htmlObj.push(innerHtml)
+  })
+  htmlObj.push('</table>')  
+  $('.config-server').html(htmlObj.join(''))
+  $('.config-server').show()
+}
+
+function playServerConfig(classId){
+  const pacmanData = decodePacmanConfig($(`.config-data-${classId}`)[0].id)
+  loadConfigAndPlay(pacmanData)
+}
+
+function loadConfigAndPlay(pacmanData){
+  loadSaveCreation = true;
+  $('.config-server').hide()
+  manualWalls = pacmanData.walls
+  manualEnergy = pacmanData.energyBar
+  manualFood = pacmanData.foodItems
+  manualEnemyDefaultLocations = pacmanData.DEFAULT_LOCATIONS
+  manualPlayerStart = pacmanData.PLAYER_START
+  onStart()
+}
+
+async function saveConfigToCloud(){
+  loadType = 'saveConfig'
+  $('.api-loader').show()
+  const resp = await getConfigs()
+  if(Object.values(resp).length >= 5){
+    alert('You dont have any saves remaining')
+  }else{
+    $('#uploadAndPlay').click()
+  }
+  $('.api-loader').hide()
+}
+
+$('#uploadAndPlay').on('change',function(evt){
+    var f = evt.target.files[0]; 
+    if (f){
+        var r = new FileReader();
+          r.onload = async function(e){     
+          const file = e.target.result//decodePacmanConfig(e.target.result)
+          if(!file){
+            alert('Config file is invalid')
+            return
+          }
+          if(loadType == 'saveConfig'){
+            const data = prompt('Enter config name',`pacman-${new Date().valueOf()}`)
+          if(data != null){
+            $('.api-loader').show()
+            const resp = await storeConfigs(file, data)
+            alert('Config saved, remaining saves : '+ (5 - Object.values(resp).length))
+            $('.api-loader').hide()
+          }
+        }else{
+          loadConfigAndPlay(decodePacmanConfig(file))
+        }
+      }
         r.readAsText(f);
     } 
 })
