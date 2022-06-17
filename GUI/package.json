@@ -12,7 +12,7 @@
   "author": "",
   "license": "",
   "devDependencies": {
-    "electron": "^9.0.3"
+    "electron": "^15.5.5"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
